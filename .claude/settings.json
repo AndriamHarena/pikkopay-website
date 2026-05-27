@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /tmp/hero.png \"https://www.figma.com/api/mcp/asset/4b012f8d-b9f7-4536-83c9-9cb9fa572ae4\")",
+      "Bash(curl -s -o /tmp/stats.png \"https://www.figma.com/api/mcp/asset/433b193a-c269-4ba1-bbd2-9bcf31eb287c\")",
+      "Bash(curl -s -o /tmp/produits.png \"https://www.figma.com/api/mcp/asset/d3bba73e-1f8a-4f69-a320-abfc90ac696e\")",
+      "Bash(pwd -W)",
+      "Bash(code --open-url \"vscode://ritwickdey.LiveServer/api/open?path=$\\(pwd -W\\)/preview/01-home.html\")",
+      "Bash(code \"preview/01-home.html\")"
+    ]
+  }
+}

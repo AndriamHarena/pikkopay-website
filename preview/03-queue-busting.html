@@ -1,0 +1,1027 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PikkoPay - Queue Busting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   PIKKOPAY — CSS PARTAGÉ
+   À coller dans Webflow : Settings → Custom Code → Head Code
+   (entre balises <style>)
+============================================================ */
+:root{
+  --bg:#F2F5EF;
+  --dark:#09110D;
+  --mid:#68736D;
+  --green-ok:#0B9A5B;
+  --bleu:#0E0B26;
+  --y1:#E1FF26;
+  --y2:#FFCF26;
+  --yd:#D9CA0C;
+  --w:1160px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* Layout */
+.pk-w{width:100%;max-width:var(--w);margin:0 auto;padding:0 20px}
+
+/* Buttons */
+.pk-btn-yellow{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:16px 22px;border-radius:14px;
+  font-size:15px;font-weight:700;color:var(--dark);
+  background:linear-gradient(180deg,#E1FF26,#FFCF26);
+  border:2px solid var(--yd);
+  box-shadow:0 6px 0 var(--yd),0 14px 24px rgba(0,0,0,.22);
+  cursor:pointer;white-space:nowrap;transition:transform .1s,box-shadow .1s;
+}
+.pk-btn-yellow:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--yd),0 18px 28px rgba(0,0,0,.25)}
+.pk-btn-yellow:active{transform:translateY(4px);box-shadow:0 2px 0 var(--yd)}
+
+.pk-btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:15px 21px;border-radius:14px;
+  font-size:16px;font-weight:700;color:var(--dark);
+  background:rgba(255,255,255,.68);backdrop-filter:blur(9px);
+  border:1px solid rgba(255,255,255,.86);
+  box-shadow:0 8px 0 rgba(9,17,13,.1),0 20px 17px rgba(9,17,13,.1),inset 0 1px 0 rgba(255,255,255,.85);
+  cursor:pointer;transition:transform .1s;
+}
+.pk-btn-ghost:hover{transform:translateY(-2px)}
+
+/* Pill / Tag */
+.pk-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;border-radius:999px;
+  font-size:13px;font-weight:700;color:var(--dark);
+  border:1px solid rgba(9,17,13,.06);
+  background:linear-gradient(123deg,rgba(225,255,38,.18),rgba(255,207,38,.18));
+}
+.pk-tag .dot{
+  width:7px;height:7px;border-radius:3.5px;flex-shrink:0;
+  background:linear-gradient(135deg,#E1FF26,#FFCF26);
+  box-shadow:0 0 0 4px rgba(225,255,38,.22);
+}
+
+/* Announce bar */
+.pk-bar{
+  background:var(--bleu);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 20px;font-size:13px;font-weight:700;color:#fff;
+  white-space:nowrap;
+}
+.pk-bar .badge{
+  background:linear-gradient(135deg,#E1FF26,#FFCF26);color:var(--dark);
+  border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;
+}
+
+/* Header */
+.pk-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.48);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.5);
+  box-shadow:0 12px 20px rgba(9,17,13,.06);
+}
+.pk-header-inner{
+  height:79px;display:flex;align-items:center;justify-content:space-between;
+  max-width:var(--w);margin:0 auto;padding:0 20px;
+}
+.pk-logo{display:flex;align-items:center;gap:7px;font-size:21px;font-weight:700;letter-spacing:-.5px;color:var(--dark)}
+.pk-logo img{height:30px;width:auto}
+.pk-nav{display:flex;align-items:center;gap:26px}
+.pk-nav a{font-size:16px;font-weight:700;color:var(--mid);transition:color .15s}
+.pk-nav a.active,.pk-nav a:hover{color:var(--dark)}
+
+/* Section titles */
+.pk-h1{font-size:clamp(48px,6vw,102px);font-weight:900;line-height:.9;letter-spacing:-.07em;color:var(--dark);text-align:center}
+.pk-h1 span{display:block;font-size:clamp(40px,5vw,88px)}
+.pk-h2{font-size:clamp(32px,4vw,64px);font-weight:900;line-height:1.05;letter-spacing:-.04em;color:var(--dark)}
+.pk-h2-center{text-align:center;max-width:864px;margin:0 auto 16px}
+.pk-h3{font-size:26px;font-weight:900;letter-spacing:-.03em;color:var(--dark)}
+.pk-sub{font-size:18px;color:var(--mid);line-height:1.6}
+.pk-sub-center{text-align:center;max-width:720px;margin:0 auto 40px}
+
+/* Checks */
+.pk-checks{display:flex;align-items:center;justify-content:center;gap:24px;font-size:15px;font-weight:700;color:var(--mid)}
+.pk-checks span{display:flex;align-items:center;gap:6px}
+.pk-check{width:18px;height:18px;flex-shrink:0}
+
+/* Cards */
+.pk-card{
+  background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 8px 30px rgba(9,17,13,.06);
+  transition:transform .2s,box-shadow .2s;
+}
+.pk-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(9,17,13,.1)}
+
+/* Feature cards */
+.pk-feat-card{
+  background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);
+  border-radius:16px;padding:29px;
+  box-shadow:0 4px 16px rgba(9,17,13,.05);
+}
+.pk-feat-icon{
+  width:54px;height:54px;border-radius:12px;
+  background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);
+  box-shadow:0 2px 8px rgba(9,17,13,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:16px;
+}
+
+/* Stats box */
+.pk-stats{
+  background:#fff;
+  border:1px solid rgba(255,255,255,.78);
+  border-radius:28px;
+  box-shadow:0 30px 90px rgba(7,16,11,.12),inset 0 1px 0 1px rgba(255,255,255,.85);
+  backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);
+  display:grid;grid-template-columns:repeat(4,1fr);padding:33px 29px;
+  max-width:980px;margin:0 auto;
+}
+.pk-stat{text-align:center;position:relative;padding:0 12px}
+.pk-stat:not(:last-child)::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:1px;background:rgba(9,17,13,.1)}
+.pk-stat-val{font-size:44px;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--dark)}
+.pk-stat-lbl{font-size:15px;color:var(--mid);margin-top:8px}
+
+/* Logos row */
+.pk-logos{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;max-width:var(--w);margin:0 auto}
+.pk-logo-item{display:flex;align-items:center;justify-content:center;opacity:.7;transition:opacity .2s}
+.pk-logo-item:hover{opacity:1}
+.pk-logo-item img{max-height:52px;max-width:150px;object-fit:contain}
+
+/* List items with yellow dot */
+.pk-list{list-style:none}
+.pk-list li{display:flex;align-items:flex-start;gap:10px;font-size:15px;font-weight:700;color:var(--dark);padding:10px 0;border-top:1px solid rgba(9,17,13,.05)}
+.pk-list li:first-child{border-top:none;padding-top:0}
+.pk-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;margin-top:2px;background:linear-gradient(135deg,#E1FF26,#FFCF26)}
+
+/* Review cards */
+.pk-rcard{background:#fff;border:1px solid rgba(9,17,13,.06);border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(9,17,13,.06);transition:transform .2s,box-shadow .2s}
+.pk-rcard:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(9,17,13,.1)}
+.pk-avatar{width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#E1FF26,#FFCF26);color:var(--dark);font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Footer dark */
+.pk-footer-inner{
+  max-width:1380px;margin:0 auto;
+  background:var(--bleu);border-radius:24px;padding:58px 64px 0;
+  position:relative;overflow:hidden;
+}
+.pk-footer-inner::after{content:'';position:absolute;right:-50px;top:-232px;width:620px;height:620px;background:radial-gradient(circle,rgba(225,255,38,.08),transparent 65%);pointer-events:none}
+
+/* CTA box dark */
+.pk-cta-box{
+  max-width:var(--w);margin:0 auto;background:var(--bleu);
+  border-radius:28px;padding:80px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+.pk-cta-box::before{content:'';position:absolute;right:-50px;top:-100px;width:460px;height:460px;background:radial-gradient(circle,rgba(225,255,38,.15),transparent 65%);pointer-events:none}
+
+/* Timeline steps */
+.pk-timeline{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;margin-bottom:48px;
+}
+.pk-timeline::before{content:'';position:absolute;top:26px;left:calc(50% - 410px);width:820px;height:3px;background:rgba(9,17,13,.08);border-radius:2px}
+.pk-tstep{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;position:relative;z-index:1;width:164px;
+}
+.pk-tstep-num{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(255,255,255,.9);border:2px solid rgba(9,17,13,.1);
+  box-shadow:0 4px 12px rgba(9,17,13,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;color:var(--dark);
+  transition:all .2s;
+}
+.pk-tstep.active .pk-tstep-num{
+  background:linear-gradient(135deg,#E1FF26,#FFCF26);
+  border-color:var(--yd);
+  box-shadow:0 6px 0 var(--yd),0 12px 20px rgba(217,202,12,.3);
+  transform:scale(1.1);
+}
+.pk-tstep-lbl{font-size:13px;font-weight:700;color:var(--mid);text-align:center}
+.pk-tstep-sub{font-size:11px;color:var(--mid);opacity:.7;text-align:center}
+
+/* Dark sections (stats bar, enseignes, IT) */
+.pk-section-dark{background:var(--dark)}
+.pk-section-dark .pk-h2{color:#fff}
+.pk-section-dark .pk-sub{color:rgba(255,255,255,.6)}
+.pk-section-dark .pk-stat-val{color:#fff}
+.pk-section-dark .pk-stat-lbl{color:rgba(255,255,255,.5)}
+.pk-section-dark .pk-stat:not(:last-child)::after{background:rgba(255,255,255,.1)}
+.pk-section-dark .pk-stats{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);box-shadow:none;backdrop-filter:none}
+.pk-section-dark .pk-logo-item{
+  background:#fff;border-radius:16px;padding:14px 22px;
+  height:68px;min-width:187px;
+  filter:none;opacity:1;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  transition:transform .2s,box-shadow .2s;
+}
+.pk-section-dark .pk-logo-item:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.pk-section-dark .pk-logo-item img{max-height:40px;max-width:140px}
+.pk-section-dark .pk-tag{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.9)}
+.pk-section-dark .pk-tag .dot{box-shadow:0 0 0 4px rgba(225,255,38,.35)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .pk-stats{grid-template-columns:repeat(2,1fr)}
+  .pk-cta-box{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .pk-h1{font-size:44px}
+  .pk-nav a:not(.pk-btn-yellow){display:none}
+  .pk-footer-inner{padding:40px 24px 0}
+  .pk-cta-box{padding:48px 32px}
+}
+
+/* ============================================================
+   RESPONSIVE - PAGE ACCUEIL (WEBFLOW EMBED)
+============================================================ */
+
+/* --- TABLETTE (Max 991px) --- */
+@media (max-width: 991px) {
+  /* Hero */
+  .home-hero-container { height: 500px !important; }
+  .home-hero-img { width: 600px !important; top: 160px !important; }
+  .home-hero-h1 { font-size: 72px !important; }
+  .home-hero-p { font-size: 60px !important; }
+  
+  /* Grilles 3 à 6 colonnes -> 3 ou 2 ou 1 colonnes */
+  .home-logos-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .home-prod-grid { grid-template-columns: 1fr !important; }
+  .home-testi-grid { grid-template-columns: 1fr !important; }
+  .home-reviews-grid { grid-template-columns: 1fr !important; }
+  
+  /* IT Section */
+  .home-it-grid { grid-template-columns: 1fr !important; }
+  .home-it-grid > div:last-child { order: -1; } /* Passe l'image au dessus du texte */
+  
+  /* Cas d'usage */
+  .home-cas-grid { grid-template-columns: 1fr !important; }
+  .home-cas-stats-grid { grid-template-columns: 1fr !important; }
+  .home-cas-stats-grid > div { border-right: none !important; border-bottom: 1px solid rgba(9,17,13,.08); padding: 15px 0 !important; }
+  .home-cas-stats-grid > div:last-child { border-bottom: none !important; }
+  
+  /* CTA Final (On annule l'absolute pour un Flex propre) */
+  .home-cta-wrapper { height: auto !important; display: flex !important; flex-direction: column-reverse !important; align-items: center !important; }
+  .home-cta-dark { position: relative !important; height: auto !important; width: 100% !important; padding: 60px 20px !important; }
+  .home-cta-dark-content { position: relative !important; left: 0 !important; top: 0 !important; width: 100% !important; text-align: center; align-items: center; }
+  .home-cta-img { position: relative !important; left: 0 !important; width: 100% !important; height: 350px !important; justify-content: center !important; }
+  
+  /* Footer */
+  .home-final-kpi-grid { grid-template-columns: 1fr !important; gap: 40px; }
+  .home-footer-top { grid-template-columns: 1fr 1fr !important; gap: 40px; }
+  .home-footer-contact { grid-column: 1 / -1; }
+}
+
+/* --- MOBILE (Max 767px) --- */
+@media (max-width: 767px) {
+  /* Homogénéisation des marges sur mobile */
+  section { padding: 60px 20px !important; }
+  
+  /* Hero */
+  .home-hero-container { height: 420px !important; }
+  .home-hero-img { width: 100% !important; top: 200px !important; }
+  .home-hero-badges { flex-direction: column; width: 100%; }
+  .home-hero-title-wrap { top: 100px !important; white-space: normal !important; width: 100%; }
+  .home-hero-h1 { font-size: 44px !important; }
+  .home-hero-p { font-size: 34px !important; }
+  .home-hero-desc { font-size: 17px !important; }
+  .home-hero-btns { flex-direction: column; width: 100%; }
+  .home-hero-btns a { width: 100% !important; min-width: 100% !important; }
+  
+  .home-logos-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  
+  /* Section IT */
+  .home-it-feat-grid { grid-template-columns: 1fr !important; }
+  .home-it-kpi-grid { grid-template-columns: 1fr !important; gap: 30px; }
+  .home-it-kpi-grid > div { border-left: none !important; border-top: 1px solid rgba(255,255,255,.1) !important; padding: 20px 0 0 0 !important; text-align: center; }
+  
+  /* Cas d'usage */
+  .home-cas-info-grid { grid-template-columns: 1fr !important; }
+  .home-cas-grid > div { padding: 30px 20px !important; }
+  
+  /* Google Reviews (Recadrage de la carte de score) */
+  .home-google-score { height: auto !important; padding: 30px 20px !important; display: flex !important; flex-direction: column; align-items: center; gap: 15px; }
+  .home-google-score > div { position: relative !important; left: 0 !important; top: 0 !important; transform: none !important; text-align: center; width: 100%; }
+  
+  .home-cta-dark h2 { font-size: 42px !important; }
+  
+  /* Final KPIs (On transforme les barres verticales en horizontales) */
+  .home-final-kpi-grid > div { border-top: 1px solid rgba(9,17,13,.1) !important; padding: 30px 0 0 0 !important; text-align: center; }
+  .home-final-kpi-grid > div > div[style*="absolute"] { display: none !important; }
+  
+  /* Footer */
+  .home-footer-top { grid-template-columns: 1fr !important; }
+  .home-footer-contact { height: auto !important; padding: 30px 20px !important; }
+  .home-footer-contact > div { flex-direction: column; text-align: center; }
+  .home-footer-bottom { flex-direction: column; align-items: center !important; text-align: center; gap: 20px; }
+  
+  /* Textes globaux */
+  h2.pk-h2, .pk-h2-center { font-size: 38px !important; }
+  .pk-stats { grid-template-columns: 1fr !important; gap: 20px; }
+  .pk-stat::after { display: none !important; }
+}
+
+/* ============================================================
+   RESPONSIVE - PAGE SCAN & GO (WEBFLOW EMBED)
+============================================================ */
+
+/* --- TABLETTE (Max 991px) --- */
+@media (max-width: 991px) {
+  /* Hero */
+  .sg-hero-grid { grid-template-columns: 1fr !important; height: auto !important; }
+  .sg-hero-mockup { transform: scale(0.8); margin: -50px auto !important; }
+  
+  /* Grilles */
+  .sg-logos-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .sg-stats-grid { grid-template-columns: 1fr !important; }
+  .sg-feat-grid { grid-template-columns: 1fr 1fr !important; }
+  .sg-vols-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  
+  /* Parcours Interactif */
+  .sg-parcours-step { grid-template-columns: 1fr !important; }
+  .sg-parcours-container { min-height: 850px !important; }
+  
+  /* Cas d'usage & Reviews */
+  .sg-cas-grid { grid-template-columns: 1fr !important; }
+  .sg-cas-stats-grid { grid-template-columns: 1fr !important; }
+  .sg-cas-stats-grid > div { border-right: none !important; border-bottom: 1px solid rgba(9,17,13,.08); padding: 15px 0 !important; }
+  .sg-cas-stats-grid > div:last-child { border-bottom: none !important; }
+  .sg-reviews-grid { grid-template-columns: 1fr !important; }
+  
+  /* CTA Final */
+  .sg-cta-wrapper { height: auto !important; display: flex !important; flex-direction: column-reverse !important; align-items: center !important; }
+  .sg-cta-dark { position: relative !important; height: auto !important; width: 100% !important; padding: 60px 20px !important; }
+  .sg-cta-dark-content { position: relative !important; left: 0 !important; top: 0 !important; width: 100% !important; text-align: center; align-items: center; }
+  .sg-cta-img { position: relative !important; left: 0 !important; width: 100% !important; height: 350px !important; justify-content: center !important; }
+  
+  /* Footer */
+  .sg-final-kpi-grid { grid-template-columns: 1fr !important; gap: 40px; }
+  .sg-footer-top { grid-template-columns: 1fr 1fr !important; gap: 40px; }
+  .sg-footer-contact { grid-column: 1 / -1; }
+}
+
+/* --- MOBILE (Max 767px) --- */
+@media (max-width: 767px) {
+  section { padding: 60px 20px !important; }
+  
+  /* Hero */
+  .sg-hero-grid h1 { font-size: 42px !important; }
+  .sg-hero-grid p { font-size: 16px !important; }
+  .sg-hero-mockup { transform: scale(0.55); margin: -120px auto !important; }
+  
+  /* Grilles */
+  .sg-logos-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .sg-feat-grid { grid-template-columns: 1fr !important; }
+  
+  /* Parcours Interactif (On permet le scroll horizontal sur les boutons) */
+  .sg-parcours-container { min-height: 950px !important; border-radius: 20px !important; }
+  .sg-parcours-step { inset: 20px !important; gap: 20px !important; }
+  .sg-parcours-img-wrap { height: 320px !important; }
+  .sg-parcours-nav { overflow-x: auto !important; padding-bottom: 15px !important; justify-content: flex-start !important; gap: 10px !important; }
+  .sg-parcours-nav::-webkit-scrollbar { height: 4px; }
+  .sg-parcours-nav::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+  .sg-parcours-nav button { min-width: 80px !important; }
+  
+  /* Vols */
+  .sg-vols-grid h2 { font-size: 38px !important; }
+  
+  /* Cas d'usage */
+  .sg-cas-info-grid { grid-template-columns: 1fr !important; }
+  .sg-cas-grid > div { padding: 30px 20px !important; }
+  
+  /* Google Reviews */
+  .sg-google-score { height: auto !important; padding: 30px 20px !important; display: flex !important; flex-direction: column; align-items: center; gap: 15px; }
+  .sg-google-score > div { position: relative !important; left: 0 !important; top: 0 !important; transform: none !important; text-align: center; width: 100%; }
+  
+  /* CTA et KPIs */
+  .sg-cta-dark h2 { font-size: 42px !important; }
+  .sg-final-kpi-grid > div { border-top: 1px solid rgba(9,17,13,.1) !important; padding: 30px 0 0 0 !important; text-align: center; }
+  .sg-final-kpi-grid > div > div[style*="absolute"] { display: none !important; }
+  
+  /* Footer */
+  .sg-footer-top { grid-template-columns: 1fr !important; }
+  .sg-footer-contact { height: auto !important; padding: 30px 20px !important; }
+  .sg-footer-contact > div { flex-direction: column; text-align: center; }
+  .sg-footer-bottom { flex-direction: column; align-items: center !important; text-align: center; gap: 20px; }
+}
+
+/* ============================================================
+   RESPONSIVE - PAGE QUEUE BUSTING (WEBFLOW EMBED)
+============================================================ */
+
+/* --- TABLETTE (Max 991px) --- */
+@media (max-width: 991px) {
+  /* Hero */
+  .qb-hero-grid { grid-template-columns: 1fr !important; min-height: auto !important; }
+  .qb-hero-mockup { transform: scale(0.8); margin: -50px auto !important; width: 100% !important; max-width: 480px !important; }
+  
+  /* Grilles */
+  .qb-logos-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .qb-stats-grid { grid-template-columns: 1fr !important; }
+  
+  /* Parcours Interactif */
+  .qb-parcours-step { grid-template-columns: 1fr !important; }
+  .qb-parcours-container { height: auto !important; min-height: 850px !important; }
+  
+  /* Fonctionnalités (On retire les position absolute pour flexbox) */
+  .qb-feat-wrapper { min-height: auto !important; display: flex !important; flex-direction: column !important; gap: 40px !important; }
+  .qb-feat-cards { position: relative !important; width: 100% !important; }
+  .qb-feat-img { position: relative !important; left: 0 !important; right: 0 !important; top: 0 !important; transform: none !important; justify-content: center !important; }
+  .qb-feat-img img { max-width: 100% !important; transform: none !important; }
+  
+  /* CTA Final */
+  .qb-cta-wrapper { height: auto !important; display: flex !important; flex-direction: column-reverse !important; align-items: center !important; }
+  .qb-cta-dark { position: relative !important; height: auto !important; width: 100% !important; padding: 60px 20px !important; }
+  .qb-cta-dark-content { position: relative !important; left: 0 !important; top: 0 !important; width: 100% !important; text-align: center; align-items: center; }
+  .qb-cta-img { position: relative !important; left: 0 !important; width: 100% !important; height: 350px !important; justify-content: center !important; }
+  
+  /* Footer */
+  .qb-final-kpi-grid { grid-template-columns: 1fr !important; gap: 40px; }
+  .qb-footer-top { grid-template-columns: 1fr 1fr !important; gap: 40px; }
+  .qb-footer-contact { grid-column: 1 / -1; }
+}
+
+/* --- MOBILE (Max 767px) --- */
+@media (max-width: 767px) {
+  /* Hero */
+  .qb-hero-grid h1 { font-size: 44px !important; }
+  .qb-hero-mockup { transform: scale(0.6); margin: -90px auto -50px !important; }
+  
+  /* Grilles */
+  .qb-logos-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  
+  /* Parcours Interactif */
+  .qb-parcours-container { min-height: 900px !important; border-radius: 20px !important; }
+  .qb-parcours-step { inset: 20px !important; gap: 20px !important; }
+  .qb-parcours-img-wrap { height: 320px !important; }
+  .qb-parcours-nav { overflow-x: auto !important; padding-bottom: 15px !important; justify-content: flex-start !important; gap: 10px !important; }
+  .qb-parcours-nav::-webkit-scrollbar { height: 4px; }
+  .qb-parcours-nav::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
+  .qb-parcours-nav div[style*="max-width:130px"] { min-width: 90px !important; }
+  
+  /* CTA et KPIs */
+  .qb-cta-dark h2 { font-size: 42px !important; }
+  .qb-final-kpi-grid > div { border-top: 1px solid rgba(9,17,13,.1) !important; padding: 30px 0 0 0 !important; text-align: center; }
+  .qb-final-kpi-grid > div > div[style*="absolute"] { display: none !important; }
+  
+  /* Footer */
+  .qb-footer-top { grid-template-columns: 1fr !important; }
+  .qb-footer-contact { height: auto !important; padding: 30px 20px !important; }
+  .qb-footer-contact > div { flex-direction: column; text-align: center; }
+  .qb-footer-bottom { flex-direction: column; align-items: center !important; text-align: center; gap: 20px; }
+}
+  </style>
+</head>
+<body>
+
+<div class="pk-bar"><span class="badge">NOUVEAU</span><span>+50 magasins déployés · 🇫🇷 Conçu, hébergé et opéré en France</span></div>
+
+<header class="pk-header">
+  <div class="pk-header-inner">
+    <a href="/" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
+    
+    <nav class="pk-nav desktop-nav">
+      <a href="/">Accueil</a>
+      <a href="/scan-go">Scan&amp;Go</a>
+      <a href="/queue-busting">Queue Busting</a>
+      <a href="/demo" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+    </nav>
+
+    <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="pk-mobile-menu" id="mobileMenu">
+    <a href="/">Accueil</a>
+    <a href="/scan-go">Scan&amp;Go</a>
+    <a href="/queue-busting">Queue Busting</a>
+    <a href="/demo" class="pk-btn-yellow">Planifier une démo</a>
+  </div>
+</header>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.querySelector('.pk-burger').classList.toggle('open');
+  }
+</script>
+
+<section style="padding:60px 20px;position:relative;overflow:hidden">
+
+  <div style="position:absolute;right:-100px;top:-200px;width:780px;height:780px;background:radial-gradient(circle,rgba(225,255,38,.3) 0%,rgba(255,207,38,.16) 50%,transparent 65%);filter:blur(1px);pointer-events:none"></div>
+
+  <div class="pk-w">
+    <div class="qb-hero-grid" style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:50px;align-items:center;min-height:580px">
+
+      <div style="display:flex;flex-direction:column;gap:18px;align-self:center">
+
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:linear-gradient(129deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(9,17,13,.06);align-self:flex-start">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f75b885bd112d9027ec_Queue_busting.svg" style="width:31px;height:31px;object-fit:contain;flex-shrink:0" alt=""/>
+          <span style="font-size:13px;font-weight:700;color:var(--dark)">Côté collaborateur · Caisse mobile</span>
+        </div>
+
+        <h1 style="font-size:72px;font-weight:700;line-height:1;letter-spacing:-.06em;color:var(--dark);margin:0">L'encaissement,<br>au bout des doigts<br>de votre équipe.</h1>
+
+        <p style="font-size:18px;line-height:1.55;color:var(--mid);max-width:600px;margin:0">Queue Busting transforme vos appareils Zebra ou les smartphones du magasin en caisses mobiles. Activez-les uniquement quand la file s'allonge — sans embaucher, sans investir, sans matériel à acheter.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;padding-top:12px">
+          <a href="/demo" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 22px;height:55px;border-radius:14px;font-size:15px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid #d9ca0c;box-shadow:0 6px 0 #d9ca0c,0 14px 24px rgba(0,0,0,.22);text-decoration:none;backdrop-filter:blur(9px)">Planifier une démo <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a href="#fonctionnalites" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 21px;height:55px;border-radius:14px;font-size:15px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.68);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.86);box-shadow:0 8px 0 rgba(9,17,13,.1),0 20px 34px rgba(9,17,13,.1),inset 0 1px 0 rgba(255,255,255,.85);text-decoration:none">Voir le parcours <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:22px;padding-top:12px">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--mid)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0b9a5b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Activation en 14 jours</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--mid)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0b9a5b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sans matériel à acheter</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--mid)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0b9a5b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Compatible Android, iOS</span>
+        </div>
+
+      </div>
+
+      <div class="qb-hero-mockup" style="position:relative;height:580px;width:100%">
+
+        <div style="position:absolute;left:24px;top:50px;width:480px;height:480px;border-radius:240px;background:radial-gradient(circle,rgba(225,255,38,.25) 0%,rgba(255,207,38,.1) 50%,transparent 70%);pointer-events:none"></div>
+
+        <div style="position:absolute;left:184px;top:0;width:481px;height:596px;display:flex;align-items:center;justify-content:center">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/6a02f0f97915d66e1465784e_4d2bc8d6-5761-4216-9022-e6cde9aa54f9.png" style="width:407px;height:auto;transform:rotate(8.26deg);filter:drop-shadow(0 20px 50px rgba(9,17,13,.18));pointer-events:none;object-fit:contain"/>
+        </div>
+
+        <div style="position:absolute;left:0;top:24px;width:476px;height:600px;display:flex;align-items:center;justify-content:center;z-index:1">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/6a02f0f934d9e4b1ae254c4a_b8fa5f6b-0ddd-4731-9334-7aa18dffc9d1.png" style="width:419px;height:auto;transform:rotate(-6.11deg);filter:drop-shadow(0 20px 50px rgba(9,17,13,.18));pointer-events:none;object-fit:contain"/>
+        </div>
+
+        <div style="position:absolute;top:85px;left:-16px;display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);box-shadow:0 14px 40px rgba(7,16,11,.12),inset 0 1px 0 rgba(255,255,255,.85);z-index:3">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <span style="font-size:12.5px;font-weight:700;color:var(--dark);white-space:nowrap">Caisse activée</span>
+        </div>
+
+        <div style="position:absolute;top:463px;left:187px;display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);box-shadow:0 14px 40px rgba(7,16,11,.12),inset 0 1px 0 rgba(255,255,255,.85);z-index:3">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+          <span style="font-size:12.5px;font-weight:700;color:var(--dark);white-space:nowrap">+28% capacité</span>
+        </div>
+
+        <div style="position:absolute;top:138px;right:7px;display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);box-shadow:0 14px 40px rgba(7,16,11,.12),inset 0 1px 0 rgba(255,255,255,.85);z-index:3">
+          <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span style="font-size:12.5px;font-weight:700;color:var(--dark);white-space:nowrap">Paiement validé</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:20px">
+    <p style="font-size:21px;font-weight:400;color:var(--mid);text-align:center;margin:0">+50 magasins déployés en conditions réelles.</p>
+    <div class="qb-logos-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;width:100%">
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a1a6b21e024c69d35_logo_intermarche.png" alt="Intermarché" style="max-width:126px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998b9b374b2c82a57e68_Logo_supermarch%C3%A9_Match.svg" alt="Match" style="max-width:110px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89989daa3d3821a6d07b0_logo_carrefour_market.png" alt="Carrefour Market" style="max-width:130px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998947c676c6807e39a7_logo_carrefour_proximit%C3%A9.png" alt="Carrefour Proximité" style="max-width:150px;max-height:50px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f899891a121e61090ee584_Logo_Franprix.png" alt="Franprix" style="max-width:118px;max-height:36px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a3e7cc13eca3a6c6b_logo_netto.png" alt="Netto" style="max-width:86px;max-height:40px;object-fit:contain"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#0e0b26;padding:90px 20px;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-200px;top:-200px;width:720px;height:720px;background:radial-gradient(circle,rgba(225,255,38,.18) 0%,rgba(255,207,38,.08) 50%,transparent 65%);pointer-events:none"></div>
+
+  <div class="pk-w" style="display:flex;flex-direction:column;gap:50px;align-items:center;position:relative">
+
+    <div style="text-align:center;max-width:760px">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(225,255,38,.18);border:1px solid rgba(225,255,38,.18);margin-bottom:20px">
+        <span style="width:7px;height:7px;border-radius:3.5px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 4px rgba(225,255,38,.22);display:inline-block;flex-shrink:0"></span>
+        <span style="font-size:13px;font-weight:700;color:#e1ff26">Trois leviers, zéro friction</span>
+      </div>
+      <h2 style="font-size:56px;font-weight:700;color:#fff;letter-spacing:-.05em;line-height:1.02;margin:0;text-align:center">Plus de capacité, sans<br>embauche, sans CAPEX.</h2>
+    </div>
+
+    <div class="qb-stats-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;width:100%">
+      <div style="background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:37px 33px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:64px;font-weight:700;letter-spacing:-.06em;line-height:.95;background:linear-gradient(108deg,#E1FF26,#FFCF26);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">0 €</div>
+        <div style="font-size:17px;font-weight:700;color:#fff;letter-spacing:-.02em;padding-top:6px">D'investissement matériel</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.5">Vos appareils Zebra, Android ou iOS deviennent caisses mobiles à la demande. Aucun nouveau hardware à acheter, à provisionner, ni à amortir.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:37px 33px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:64px;font-weight:700;letter-spacing:-.06em;line-height:.95;background:linear-gradient(104deg,#E1FF26,#FFCF26);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">x2</div>
+        <div style="font-size:17px;font-weight:700;color:#fff;letter-spacing:-.02em;padding-top:6px">Capacité d'encaissement</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.5">Médiane mesurée chez Carrefour City Jussieu les midi, sur 4 mois. Une capacité d'encaissement instantanée qui ne prend pas de place.</div>
+      </div>
+      <div style="background:rgba(255,255,255,.04);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:37px 33px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:64px;font-weight:700;letter-spacing:-.06em;line-height:.95;background:linear-gradient(121deg,#E1FF26,#FFCF26);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">15 min</div>
+        <div style="font-size:17px;font-weight:700;color:#fff;letter-spacing:-.02em;padding-top:6px">De formation par collaborateur</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.5">Reproduit la logique d'une caisse classique en plus simple. Vos équipes sont opérationnelles dès le premier rush qui suit le déploiement.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="background:#fff;padding:96px 20px;position:relative;overflow:hidden">
+
+  <div style="position:absolute;left:-300px;top:50%;transform:translateY(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(225,255,38,.1) 0%,transparent 65%);pointer-events:none"></div>
+
+  <div class="pk-w" style="display:flex;flex-direction:column;gap:42px;align-items:center">
+
+    <div style="text-align:center;max-width:760px">
+      <div class="pk-tag" style="display:inline-flex;margin-bottom:20px"><span class="dot"></span>Le parcours collaborateur</div>
+      <h2 style="font-size:56px;font-weight:700;letter-spacing:-.05em;color:var(--dark);line-height:1.02;margin:0 0 20px">Pensé pour les jours qui débordent.</h2>
+      <p style="font-size:18px;color:var(--mid);line-height:1.55;max-width:600px;margin:0 auto">Vos collaborateurs maîtrisent l'outil en 15 minutes. La logique reproduit celle d'une caisse classique, en plus simple et plus mobile.</p>
+    </div>
+
+    <div style="max-width:880px;width:100%;padding:0 30px;position:relative">
+      <div style="position:absolute;background:rgba(9,17,13,.08);height:4px;left:69px;right:69px;border-radius:999px;top:24.2px"></div>
+      <div class="qb-parcours-nav" style="display:flex;align-items:flex-start;justify-content:space-between">
+
+        <div style="flex:1 0 0;max-width:130px;min-width:1px;height:98px;position:relative;cursor:pointer" onclick="showStepQB(1)">
+          <div id="qbs1" style="position:absolute;left:50%;transform:translateX(-50%);top:-4px;width:60px;height:60px;border-radius:30px;background:linear-gradient(135deg,#E1FF26,#FFCF26);border:4px solid #09110d;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--dark);box-shadow:0 0 0 6px rgba(225,255,38,.25),0 12px 30px rgba(225,255,38,.5)">1</div>
+          <div style="position:absolute;top:52px;width:100%;text-align:center;padding-top:14px">
+            <div id="qbl1" style="font-size:12.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Activer</div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--mid);opacity:.7;margin-top:2px">2 sec</div>
+          </div>
+        </div>
+
+        <div style="flex:1 0 0;max-width:130px;min-width:1px;height:98px;position:relative;cursor:pointer" onclick="showStepQB(2)">
+          <div id="qbs2" style="position:absolute;left:50%;transform:translateX(-50%);top:0;width:52px;height:52px;border-radius:26px;background:linear-gradient(135deg,#E1FF26,#FFCF26);border:4px solid rgba(9,17,13,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--mid);box-shadow:0 4px 14px rgba(7,16,11,.06)">2</div>
+          <div style="position:absolute;top:52px;width:100%;text-align:center;padding-top:14px">
+            <div id="qbl2" style="font-size:12.5px;font-weight:700;color:var(--mid);letter-spacing:-.01em">Scanner</div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--mid);opacity:.7;margin-top:2px">pour le client</div>
+          </div>
+        </div>
+
+        <div style="flex:1 0 0;max-width:130px;min-width:1px;height:98px;position:relative;cursor:pointer" onclick="showStepQB(3)">
+          <div id="qbs3" style="position:absolute;left:50%;transform:translateX(-50%);top:0;width:52px;height:52px;border-radius:26px;background:#fff;border:4px solid rgba(9,17,13,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--mid);box-shadow:0 4px 7px rgba(7,16,11,.06)">3</div>
+          <div style="position:absolute;top:52px;width:100%;text-align:center;padding-top:14px">
+            <div id="qbl3" style="font-size:12.5px;font-weight:700;color:var(--mid);letter-spacing:-.01em">Encaisser</div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--mid);opacity:.7;margin-top:2px">5 sec</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="qb-parcours-container" style="max-width:1100px;width:100%;background:rgba(255,255,255,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:28px;box-shadow:0 30px 90px rgba(7,16,11,.12),inset 0 1px 0 rgba(255,255,255,.85);height:526px;overflow:hidden;position:relative">
+
+      <div id="qbstage1" class="qb-parcours-step" style="position:absolute;top:54px;left:48px;right:48px;bottom:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;opacity:1;transition:opacity .35s">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--dark);filter:drop-shadow(0 4px 6px rgba(225,255,38,.4));flex-shrink:0">1</div>
+            <span style="font-size:11.5px;font-weight:700;color:var(--mid);letter-spacing:.14em;text-transform:uppercase">Activer</span>
+          </div>
+          <h3 style="font-size:42px;font-weight:700;letter-spacing:-.045em;color:var(--dark);line-height:1.02;margin:0">Une caisse mobile en 1 clic.</h3>
+          <p style="font-size:17px;color:var(--mid);line-height:1.55;margin:0">Quand la file s'allonge, le directeur ou le collaborateur transforme un Zebra ou un smartphone du magasin en caisse mobile. L'appareil bascule en mode encaissement, prêt à servir.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;padding-top:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Activation directement sur l'appareil</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Compatible Android et iOS — pas de matériel dédié</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Aucune configuration : l'appareil est déjà connecté à votre caisse</span></div>
+          </div>
+        </div>
+        <div class="qb-parcours-img-wrap" style="display:flex;align-items:center;justify-content:center">
+          <div style="background:#1a2218;border:5px solid #0a1208;border-radius:22px;width:230px;height:380px;padding:12px;position:relative;box-shadow:0 30px 30px rgba(7,16,11,.3)">
+            <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:80px;height:22px;background:#0a1208;border-radius:5px 5px 0 0"></div>
+            <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:50px;height:5px;background:#3a3a3a;border-radius:2px"></div>
+            <div style="background:linear-gradient(180deg,#fff,#fff9df);border-radius:14px;height:100%;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px 16px">
+              <div style="width:60px;height:60px;border-radius:30px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 8px rgba(225,255,38,.18),0 8px 20px rgba(225,255,38,.4);flex-shrink:0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:var(--dark);letter-spacing:-.02em;text-align:center">Mode caisse mobile</div>
+              <div style="font-size:11px;font-weight:700;color:var(--mid);text-align:center;line-height:1.4">Prêt à encaisser<br>Connecté à la caisse principale</div>
+              <div style="background:var(--dark);color:#fff;font-size:11px;font-weight:700;text-align:center;border-radius:10px;padding:11px;width:100%;margin-top:auto">Démarrer l'encaissement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="qbstage2" class="qb-parcours-step" style="position:absolute;top:54px;left:88px;right:8px;bottom:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;opacity:0;transition:opacity .35s;pointer-events:none">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--dark);filter:drop-shadow(0 4px 6px rgba(225,255,38,.4));flex-shrink:0">2</div>
+            <span style="font-size:11.5px;font-weight:700;color:var(--mid);letter-spacing:.14em;text-transform:uppercase">Scanner</span>
+          </div>
+          <h3 style="font-size:42px;font-weight:700;letter-spacing:-.045em;color:var(--dark);line-height:1.02;margin:0">Scanner en rayon, pas en caisse.</h3>
+          <p style="font-size:17px;color:var(--mid);line-height:1.55;margin:0">Le collaborateur va vers le client, scanne ses articles directement dans le rayon ou en file d'attente. Le panier se construit sur l'appareil avec les prix exacts et les promotions en cours.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;padding-top:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Scanner laser intégré (Zebra) ou caméra (smartphone)</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Synchronisation native avec votre catalogue magasin</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Promotions, fidélité et titres-restaurant pris en charge</span></div>
+          </div>
+        </div>
+        <div class="qb-parcours-img-wrap" style="display:flex;align-items:center;justify-content:center">
+          <div style="background:#1a2218;border:5px solid #0a1208;border-radius:22px;width:230px;height:380px;padding:12px;position:relative;box-shadow:0 30px 30px rgba(7,16,11,.3)">
+            <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:80px;height:22px;background:#0a1208;border-radius:5px 5px 0 0"></div>
+            <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:50px;height:5px;background:#3a3a3a;border-radius:2px"></div>
+            <div style="background:linear-gradient(180deg,#fff,#fff9df);border-radius:14px;height:100%;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:22px 12px 14px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px 4px">
+                <span style="font-size:10px;font-weight:700;color:var(--dark)">11:43</span>
+                <div style="display:flex;align-items:center;gap:3px">
+                  <div style="width:16px;height:9px;border:1px solid var(--dark);border-radius:2px;background:linear-gradient(90deg,#0b9a5b 80%,transparent 80%)"></div>
+                  <span style="font-size:10px;font-weight:700;color:var(--dark)">86%</span>
+                </div>
+              </div>
+              <div style="display:inline-flex;align-items:center;gap:6px;background:#0b9a5b;border-radius:999px;padding:4.5px 10px;align-self:flex-start">
+                <div style="width:5px;height:5px;border-radius:2.5px;background:#fff"></div>
+                <span style="font-size:9.5px;font-weight:700;color:#fff;letter-spacing:.04em;text-transform:uppercase">Scan en cours</span>
+              </div>
+              <div style="background:rgba(9,17,13,.85);border-radius:12px;flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+                <div style="width:100px;height:80px;border:2px solid #e1ff26;border-radius:8px;position:relative">
+                  <div style="position:absolute;top:50%;left:-3px;right:-3px;height:2px;background:#e1ff26;transform:translateY(-50%);box-shadow:0 0 10px #e1ff26"></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;background:rgba(11,154,91,.12);border-radius:8px;padding:8px 11px">
+                <div style="width:7px;height:7px;border-radius:3.5px;background:#0b9a5b;flex-shrink:0"></div>
+                <span style="font-size:10.5px;font-weight:700;color:#0b9a5b">3 articles · 7,60 €</span>
+              </div>
+              <div style="text-align:center;font-size:10px;font-weight:700;color:var(--mid)">Visez le code-barres</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="qbstage3" class="qb-parcours-step" style="position:absolute;top:54px;left:88px;right:8px;bottom:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;opacity:0;transition:opacity .35s;pointer-events:none">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:28px;height:28px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--dark);filter:drop-shadow(0 4px 6px rgba(225,255,38,.4));flex-shrink:0">3</div>
+            <span style="font-size:11.5px;font-weight:700;color:var(--mid);letter-spacing:.14em;text-transform:uppercase">Encaisser</span>
+          </div>
+          <h3 style="font-size:42px;font-weight:700;letter-spacing:-.045em;color:var(--dark);line-height:1.02;margin:0">Paiement et ticket, en un geste.</h3>
+          <p style="font-size:17px;color:var(--mid);line-height:1.55;margin:0">Le client paie en sans contact directement sur l'appareil. Le ticket part par email instantanément ou s'imprime sur l'imprimante mobile. Le client repart, le collaborateur enchaîne.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;padding-top:10px">
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Tap to Pay sur iPhone, NFC sur Zebra, code PIN au-delà des plafonds</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Titres-restaurant Edenred, Conecs et Sodexo intégrés nativement</span></div>
+            <div style="display:flex;align-items:flex-start;gap:10px"><div style="width:14px;height:14px;border-radius:7px;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.2);flex-shrink:0;margin-top:4px"></div><span style="font-size:14.5px;font-weight:700;color:var(--dark)">Ticket par email instantané ou imprimante mobile Bluetooth</span></div>
+          </div>
+        </div>
+        <div class="qb-parcours-img-wrap" style="display:flex;align-items:center;justify-content:center">
+          <div style="background:#1a2218;border:5px solid #0a1208;border-radius:22px;width:230px;height:380px;padding:12px;position:relative;box-shadow:0 30px 30px rgba(7,16,11,.3)">
+            <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:80px;height:22px;background:#0a1208;border-radius:5px 5px 0 0"></div>
+            <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:50px;height:5px;background:#3a3a3a;border-radius:2px"></div>
+            <div style="background:linear-gradient(180deg,#fff,#fff9df);border-radius:14px;height:100%;overflow:hidden;position:relative">
+              <div style="position:absolute;top:21px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;padding:0 4px 4px">
+                <span style="font-size:10px;font-weight:700;color:var(--dark)">11:44</span>
+                <div style="display:flex;align-items:center;gap:3px">
+                  <div style="width:16px;height:9px;border:1px solid var(--dark);border-radius:2px;background:linear-gradient(90deg,#0b9a5b 80%,transparent 80%)"></div>
+                  <span style="font-size:10px;font-weight:700;color:var(--dark)">85%</span>
+                </div>
+              </div>
+              <div style="position:absolute;top:51px;left:12px;display:inline-flex;align-items:center;gap:6px;background:#0b9a5b;border-radius:999px;padding:4.5px 10px">
+                <div style="width:5px;height:5px;border-radius:2.5px;background:#fff"></div>
+                <span style="font-size:9.5px;font-weight:700;color:#fff;letter-spacing:.04em;text-transform:uppercase">Paiement validé</span>
+              </div>
+              <div style="position:absolute;top:85px;left:12px;right:12px;text-align:center;font-size:9.5px;font-weight:700;color:var(--mid);letter-spacing:.1em;text-transform:uppercase">Total réglé</div>
+              <div style="position:absolute;top:110px;left:12px;right:12px;text-align:center;font-size:32px;font-weight:700;color:var(--dark);letter-spacing:-.03em;line-height:1.5">8,60 €</div>
+              <div style="position:absolute;top:192px;left:12px;right:12px;bottom:35px;background:#fff;border-radius:8px 8px 4px 4px;box-shadow:0 4px 7px rgba(7,16,11,.08);padding:14px 12px;display:flex;flex-direction:column;gap:5px">
+                <div style="text-align:center;font-size:10px;font-weight:700;color:var(--dark);letter-spacing:.04em;margin-bottom:4px">TICKET ENVOYÉ</div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:8.5px;font-weight:700;color:var(--dark)">Baguette</span><span style="font-size:8.5px;font-weight:700;color:var(--dark)">1,30 €</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:8.5px;font-weight:700;color:var(--dark)">Lait 1L ×2</span><span style="font-size:8.5px;font-weight:700;color:var(--dark)">2,40 €</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:8.5px;font-weight:700;color:var(--dark)">Salade mixte</span><span style="font-size:8.5px;font-weight:700;color:var(--dark)">4,90 €</span></div>
+                <div style="border-top:1px dashed rgba(9,17,13,.2);padding-top:6px;margin-top:3px;display:flex;justify-content:space-between"><span style="font-size:10px;font-weight:700;color:var(--dark)">TOTAL</span><span style="font-size:10px;font-weight:700;color:var(--dark)">8,60 €</span></div>
+              </div>
+              <div style="position:absolute;bottom:0;left:12px;right:12px;background:#0b9a5b;border-radius:9px;padding:9px;text-align:center;font-size:10.5px;font-weight:700;color:#fff;letter-spacing:.01em;box-shadow:0 4px 5px rgba(11,154,91,.3)">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Envoyé par email
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  var QBS_CHECK = '<div style="width:22px;height:14px;border-bottom:3px solid #09110d;border-left:3px solid #09110d;transform:rotate(-45deg);margin-top:-3px;flex-shrink:0"></div>';
+  function showStepQB(n){
+    for(var i=1;i<=3;i++){
+      var btn=document.getElementById('qbs'+i);
+      var lbl=document.getElementById('qbl'+i);
+      var stage=document.getElementById('qbstage'+i);
+      if(i===n){
+        btn.style.cssText='position:absolute;left:50%;transform:translateX(-50%);top:-4px;width:60px;height:60px;border-radius:30px;background:linear-gradient(135deg,#E1FF26,#FFCF26);border:4px solid #09110d;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#09110d;box-shadow:0 0 0 6px rgba(225,255,38,.25),0 12px 30px rgba(225,255,38,.5)';
+        btn.innerHTML=i;
+        lbl.style.color='#09110d';
+        stage.style.opacity='1';
+        stage.style.pointerEvents='auto';
+      } else if(i<n){
+        btn.style.cssText='position:absolute;left:50%;transform:translateX(-50%);top:0;width:52px;height:52px;border-radius:26px;background:linear-gradient(135deg,#E1FF26,#FFCF26);border:4px solid rgba(9,17,13,.08);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(7,16,11,.06)';
+        btn.innerHTML=QBS_CHECK;
+        lbl.style.color='#68736d';
+        stage.style.opacity='0';
+        stage.style.pointerEvents='none';
+      } else {
+        btn.style.cssText='position:absolute;left:50%;transform:translateX(-50%);top:0;width:52px;height:52px;border-radius:26px;background:#fff;border:4px solid rgba(9,17,13,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#68736d;box-shadow:0 4px 7px rgba(7,16,11,.06)';
+        btn.innerHTML=i;
+        lbl.style.color='#68736d';
+        stage.style.opacity='0';
+        stage.style.pointerEvents='none';
+      }
+    }
+  }
+  </script>
+
+</section>
+
+<section style="background:linear-gradient(180deg,#fff,#f4f5ef);padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;gap:50px;align-items:center">
+
+    <div style="text-align:center;max-width:760px">
+      <h2 style="font-size:56px;font-weight:700;letter-spacing:-.05em;color:var(--dark);line-height:1.02;margin:0 0 16px">Découvrez nos fonctionnalités Pikko Boost</h2>
+      <p style="font-size:18px;color:var(--mid);line-height:1.55;margin:0">Chaque feature de Queue Busting répond à une vraie contrainte terrain :<br>pic d'affluence, manque de personnel, surface limitée, contraintes IT.</p>
+    </div>
+
+    <div class="qb-feat-wrapper" style="position:relative;width:100%;min-height:870px">
+
+      <div class="qb-feat-cards" style="position:absolute;left:0;top:0;width:49%;display:flex;flex-direction:column;gap:22px">
+
+        <div style="background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:22px;padding:33px 29px;display:flex;flex-direction:column;gap:9px;box-shadow:0 18px 50px rgba(7,16,11,.06)">
+          <div style="width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 11px rgba(225,255,38,.35);flex-shrink:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          </div>
+          <h3 style="font-size:18px;font-weight:700;color:var(--dark);letter-spacing:-.02em;margin:13px 0 0">Zéro nouveau matériel</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.55;margin:0">Compatible avec vos Zebra TC existants, Android, iOS. Vos appareils déjà déployés deviennent des caisses mobiles à la demande, sans achat ni travaux.</p>
+        </div>
+
+        <div style="background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:22px;padding:33px 29px;display:flex;flex-direction:column;gap:9px;box-shadow:0 18px 50px rgba(7,16,11,.06)">
+          <div style="width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 11px rgba(225,255,38,.35);flex-shrink:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="22" height="16" x="1" y="4" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3 style="font-size:18px;font-weight:700;color:var(--dark);letter-spacing:-.02em;margin:13px 0 0">Tap to Pay &amp; sans contact</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.55;margin:0">Encaissement direct sur l'appareil. Tap to Pay sur iPhone, lecteur NFC sur Zebra, code PIN au-delà des plafonds. Aucun terminal de paiement séparé.</p>
+        </div>
+
+        <div style="background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:22px;padding:33px 29px;display:flex;flex-direction:column;gap:9px;box-shadow:0 18px 50px rgba(7,16,11,.06)">
+          <div style="width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#E1FF26,#FFCF26);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 11px rgba(225,255,38,.35);flex-shrink:0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </div>
+          <h3 style="font-size:18px;font-weight:700;color:var(--dark);letter-spacing:-.02em;margin:13px 0 0">Sync caisse principale</h3>
+          <p style="font-size:14.5px;color:var(--mid);line-height:1.55;margin:0">Toutes les transactions sont consolidées en temps réel dans votre système caisse. Reporting unifié, comptabilité unique, aucune resaisie.</p>
+        </div>
+
+      </div>
+
+      <div class="qb-feat-img" style="position:absolute;left:46%;top:-15px;right:-60px;display:flex;align-items:flex-start;justify-content:flex-end;pointer-events:none;overflow:visible">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/6a01efa0b41ce7fb93d04fdb_Fonctionnalit%C3%A9s%20Pikkoboost.png" alt="" style="width:100%;max-width:680px;height:auto;transform:rotate(.36deg);filter:drop-shadow(0 30px 60px rgba(7,16,11,.18))"/>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section style="padding:80px 20px" id="demo">
+  <div class="qb-cta-wrapper" style="position:relative;max-width:1160px;margin:0 auto;height:640px">
+
+    <div class="qb-cta-dark" style="position:absolute;bottom:0;left:0;right:0;height:499px;background:var(--bleu);border-radius:34px;overflow:hidden">
+      <div style="position:absolute;right:-160px;top:-215px;width:460px;height:460px;background:radial-gradient(circle,rgba(225,255,38,.24) 0%,rgba(255,207,38,.12) 50%,transparent 65%);pointer-events:none"></div>
+      <div class="qb-cta-dark-content" style="position:absolute;left:58px;top:45px;width:500px;display:flex;flex-direction:column;gap:18px">
+        <div>
+          <h2 style="font-size:68px;font-weight:700;line-height:.96;letter-spacing:-.07em;color:#fff;margin-bottom:18px">Et si vos files d'attente devenaient optionnelles ?</h2>
+          <p style="font-size:21px;color:rgba(255,255,255,.68);line-height:1.5;max-width:444px">Démo personnalisée de 30 minutes avec un de nos experts retail.</p>
+        </div>
+        <a href="/demo" style="display:flex;align-items:center;justify-content:center;padding:16px 22px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid #0B1209;box-shadow:0 6px 0 #0B1209,0 14px 24px rgba(0,0,0,.22);text-decoration:none;width:100%;box-sizing:border-box">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div class="qb-cta-img" style="position:absolute;left:489px;top:0;width:726px;height:646px;pointer-events:none;overflow:visible;display:flex;align-items:flex-end;justify-content:flex-end">
+      <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f7891778d1fbbdb93d0_final_cta_home.png" alt="" style="width:100%;height:100%;object-fit:contain;object-position:bottom right"/>
+    </div>
+
+  </div>
+</section>
+
+<section style="padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:20px;position:relative">
+
+    <div style="text-align:center">
+      <h2 style="font-size:68px;font-weight:700;letter-spacing:-.07em;color:var(--dark);margin:0;line-height:1">Déjà adopté par les enseignes alimentaires.</h2>
+      <p style="font-size:21px;color:var(--mid);text-align:center;padding-top:16px;margin:0">+50 magasins déployés en conditions réelles.</p>
+    </div>
+
+    <div class="qb-logos-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;width:100%">
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a1a6b21e024c69d35_logo_intermarche.png" alt="Intermarché" style="max-width:126px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998b9b374b2c82a57e68_Logo_supermarch%C3%A9_Match.svg" alt="Match" style="max-width:110px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89989daa3d3821a6d07b0_logo_carrefour_market.png" alt="Carrefour Market" style="max-width:130px;max-height:54px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998947c676c6807e39a7_logo_carrefour_proximit%C3%A9.png" alt="Carrefour Proximité" style="max-width:150px;max-height:50px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f899891a121e61090ee584_Logo_Franprix.png" alt="Franprix" style="max-width:118px;max-height:36px;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a3e7cc13eca3a6c6b_logo_netto.png" alt="Netto" style="max-width:86px;max-height:40px;object-fit:contain"/>
+      </div>
+    </div>
+
+    <div class="qb-final-kpi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);width:100%;margin-top:28px">
+      <div style="padding:0 20px;position:relative">
+        <div style="line-height:1;margin-bottom:14px"><span style="font-size:72px;font-weight:700;letter-spacing:-.05em;color:var(--dark)">14 </span><span style="font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--mid)">jrs.</span></div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Pour déployer et être effectif</div>
+        <div style="position:absolute;right:0;top:8px;width:1px;height:80px;background:linear-gradient(180deg,transparent,rgba(9,17,13,.12) 50%,transparent)"></div>
+      </div>
+      <div style="padding:0 20px;position:relative">
+        <div style="font-size:72px;font-weight:700;letter-spacing:-.05em;color:var(--dark);line-height:1;margin-bottom:14px">24/7</div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Support opérationnel disponible</div>
+        <div style="position:absolute;right:0;top:8px;width:1px;height:80px;background:linear-gradient(180deg,transparent,rgba(9,17,13,.12) 50%,transparent)"></div>
+      </div>
+      <div style="padding:0 20px">
+        <div style="line-height:1;margin-bottom:14px"><span style="font-size:72px;font-weight:700;letter-spacing:-.05em;color:var(--dark)">100</span><span style="font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--mid)">%</span></div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Compatible avec votre écosystème caisse</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer style="padding-top:28px;padding:28px 20px 0">
+  <div style="max-width:1380px;margin:0 auto;background:var(--bleu);border-radius:46px 46px 0 0;padding:58px 64px 42px;position:relative;overflow:hidden;box-shadow:0 -30px 100px rgba(9,17,13,.18)">
+
+    <div style="position:absolute;right:-200px;top:-232px;width:620px;height:620px;background:radial-gradient(circle,rgba(225,255,38,.28) 0%,rgba(255,207,38,.16) 50%,transparent 65%);pointer-events:none"></div>
+
+    <div class="qb-footer-top" style="display:grid;grid-template-columns:300px 300px 1fr;gap:0;margin-bottom:34px;min-height:235px">
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-.03em">L'encaissement 2.0</div>
+        <a href="/scan-go" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Scan&amp;Go</a>
+        <a href="/queue-busting" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Queue Busting</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-.03em">Contact</div>
+        <a href="/demo" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Demander une démo</a>
+        <a href="mailto:contact@pikkopay.fr" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">contact@pikkopay.fr</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Mentions légales</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">RGPD</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Politique de confidentialité</a>
+      </div>
+
+      <div class="qb-footer-contact" style="position:relative;background:rgba(255,255,255,.08);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:34px;height:235px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;padding:0 36px">
+        <div style="display:flex;align-items:center;gap:27px">
+          <div style="width:111px;height:111px;border-radius:50%;border:5px solid #fff;overflow:hidden;flex-shrink:0;background:linear-gradient(170deg,#FFCF26,#E1FF26)">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998cad4a130f604d98b6_photo_alexandre.png" alt="Alexandre" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="font-size:38px;font-weight:700;color:#fff;letter-spacing:-.06em;line-height:1">Contactez nous !</h3>
+            <a href="/demo" style="display:inline-flex;align-items:center;gap:13px;padding:15px 21px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.92);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.9);text-decoration:none;white-space:nowrap">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="height:1px;background:rgba(255,255,255,.14);margin-bottom:34px"></div>
+
+    <div class="qb-footer-bottom" style="display:flex;align-items:center;justify-content:space-between;gap:20px">
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:300px">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a9ddecf6ef5ac5d7a_logo_pikkopay_horizontal_white_yellow.svg" alt="PikkoPay" style="height:28px;width:auto;display:block"/>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.8);line-height:1.5">La nouvelle génération d'encaissement pour le retail alimentaire. Conçu, développé et opéré en France.</p>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.25);font-size:12.5px;font-weight:700;color:#fff;width:fit-content">
+          <span style="display:inline-flex;overflow:hidden;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.15);width:18px;height:13px;flex-shrink:0">
+            <span style="flex:1;background:#0055a4"></span><span style="flex:1;background:#fff"></span><span style="flex:1;background:#ef4135"></span>
+          </span>
+          Conçu, hébergé et opéré en France
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:center">
+        <a href="https://www.linkedin.com/in/alexandre-chen/" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">in</a>
+        <a href="#" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">x</a>
+        <a href="#" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">◎</a>
+      </div>
+
+      <div style="font-size:16px;color:rgba(255,255,255,.78)">© 2026 Tous droits réservés.</div>
+
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>

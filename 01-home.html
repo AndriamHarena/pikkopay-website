@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PikkoPay — L'encaissement simple et rapide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   PIKKOPAY — CSS PARTAGÉ
+============================================================ */
+:root{--bg:#F2F5EF;--dark:#09110D;--mid:#68736D;--green-ok:#0B9A5B;--bleu:#0E0B26;--y1:#E1FF26;--y2:#FFCF26;--yd:#D9CA0C;--w:1160px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+.pk-w{width:100%;max-width:var(--w);margin:0 auto;padding:0 20px}
+
+.pk-btn-yellow{display:inline-flex;align-items:center;justify-content:center;padding:16px 22px;border-radius:14px;font-size:15px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid var(--yd);box-shadow:0 6px 0 var(--yd),0 14px 24px rgba(0,0,0,.22);cursor:pointer;white-space:nowrap;transition:transform .1s,box-shadow .1s}
+.pk-btn-yellow:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--yd),0 18px 28px rgba(0,0,0,.25)}
+.pk-btn-yellow:active{transform:translateY(4px);box-shadow:0 2px 0 var(--yd)}
+
+.pk-btn-ghost{display:inline-flex;align-items:center;justify-content:center;padding:15px 21px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.68);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.86);box-shadow:0 8px 0 rgba(9,17,13,.1),0 20px 17px rgba(9,17,13,.1),inset 0 1px 0 rgba(255,255,255,.85);cursor:pointer;transition:transform .1s}
+.pk-btn-ghost:hover{transform:translateY(-2px)}
+
+.pk-tag{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--dark);border:1px solid rgba(9,17,13,.06);background:linear-gradient(123deg,rgba(225,255,38,.18),rgba(255,207,38,.18))}
+.pk-tag .dot{width:7px;height:7px;border-radius:3.5px;flex-shrink:0;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 4px rgba(225,255,38,.22)}
+
+.pk-bar{background:var(--bleu);display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}
+.pk-bar .badge{background:linear-gradient(135deg,#E1FF26,#FFCF26);color:var(--dark);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+
+.pk-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.48);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.5);box-shadow:0 12px 20px rgba(9,17,13,.06)}
+.pk-header-inner{height:79px;display:flex;align-items:center;justify-content:space-between;max-width:var(--w);margin:0 auto;padding:0 20px}
+.pk-logo{display:flex;align-items:center;gap:7px;font-size:21px;font-weight:700;letter-spacing:-.5px;color:var(--dark)}
+.pk-logo img{height:30px;width:auto}
+.pk-nav{display:flex;align-items:center;gap:26px}
+.pk-nav a{font-size:16px;font-weight:700;color:var(--mid);transition:color .15s}
+.pk-nav a.active,.pk-nav a:hover{color:var(--dark)}
+
+.pk-h1{font-size:clamp(48px,6vw,102px);font-weight:900;line-height:.9;letter-spacing:-.07em;color:var(--dark);text-align:center}
+.pk-h1 span{display:block;font-size:clamp(40px,5vw,88px)}
+.pk-h2{font-size:clamp(32px,4vw,64px);font-weight:900;line-height:1.05;letter-spacing:-.04em;color:var(--dark)}
+.pk-h2-center{text-align:center;max-width:864px;margin:0 auto 16px}
+.pk-h3{font-size:26px;font-weight:900;letter-spacing:-.03em;color:var(--dark)}
+.pk-sub{font-size:18px;color:var(--mid);line-height:1.6}
+.pk-sub-center{text-align:center;max-width:720px;margin:0 auto 40px}
+
+.pk-card{background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(9,17,13,.06);transition:transform .2s,box-shadow .2s}
+.pk-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(9,17,13,.1)}
+
+.pk-feat-card{background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);border-radius:16px;padding:29px;box-shadow:0 4px 16px rgba(9,17,13,.05)}
+.pk-feat-icon{width:54px;height:54px;border-radius:12px;background:rgba(255,255,255,.9);border:1px solid rgba(9,17,13,.08);box-shadow:0 2px 8px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+
+.pk-stats{background:#fff;border:1px solid rgba(255,255,255,.78);border-radius:28px;box-shadow:0 30px 90px rgba(7,16,11,.12),inset 0 1px 0 1px rgba(255,255,255,.85);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);display:grid;grid-template-columns:repeat(4,1fr);padding:33px 29px;max-width:980px;margin:0 auto}
+.pk-stat{text-align:center;position:relative;padding:0 12px}
+.pk-stat:not(:last-child)::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,rgba(9,17,13,.12),transparent)}
+.pk-stat-val{font-size:44px;font-weight:900;line-height:1;letter-spacing:-2.64px;background:linear-gradient(to bottom,#09110d,#3a4138);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pk-stat-lbl{font-size:15px;color:var(--mid);margin-top:8px}
+
+.pk-logos{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;max-width:var(--w);margin:0 auto}
+.pk-logo-item{display:flex;align-items:center;justify-content:center;opacity:.7;transition:opacity .2s}
+.pk-logo-item:hover{opacity:1}
+.pk-logo-item img{max-height:52px;max-width:150px;object-fit:contain}
+
+.pk-list{list-style:none}
+.pk-list li{display:flex;align-items:flex-start;gap:10px;font-size:15px;font-weight:700;color:var(--dark);padding:10px 0}
+.pk-list li:first-child{padding-top:0}
+.pk-list--sep li{border-top:1px solid rgba(9,17,13,.05)}
+.pk-list--sep li:first-child{border-top:none}
+.pk-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;margin-top:2px;background:linear-gradient(135deg,#E1FF26,#FFCF26)}
+
+.pk-rcard{background:#fff;border:1px solid rgba(9,17,13,.06);border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(9,17,13,.06);transition:transform .2s,box-shadow .2s}
+.pk-rcard:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(9,17,13,.1)}
+.pk-avatar{width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#E1FF26,#FFCF26);color:var(--dark);font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+
+.pk-section-dark{background:var(--dark)}
+.pk-section-dark .pk-h2{color:#fff}
+.pk-section-dark .pk-sub{color:rgba(255,255,255,.6)}
+.pk-section-dark .pk-stat-lbl{color:rgba(255,255,255,.5)}
+.pk-section-dark .pk-stat:not(:last-child)::after{background:rgba(255,255,255,.1)}
+.pk-section-dark .pk-stats{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);box-shadow:none;backdrop-filter:none}
+.pk-section-dark .pk-logo-item{background:#fff;border-radius:16px;padding:14px 22px;height:68px;min-width:187px;filter:none;opacity:1;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s}
+.pk-section-dark .pk-logo-item:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.pk-section-dark .pk-logo-item img{height:36px;width:auto;object-fit:contain}
+.sg-logos-grid img{height:36px;width:auto;object-fit:contain}
+.qb-logos-grid img{height:36px;width:auto;object-fit:contain}
+.pk-section-dark .pk-tag{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.9)}
+.pk-section-dark .pk-tag .dot{box-shadow:0 0 0 4px rgba(225,255,38,.35)}
+
+.pk-cta-box{max-width:var(--w);margin:0 auto;background:var(--bleu);border-radius:28px;padding:80px;position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.pk-cta-box::before{content:'';position:absolute;right:-50px;top:-100px;width:460px;height:460px;background:radial-gradient(circle,rgba(225,255,38,.15),transparent 65%);pointer-events:none}
+
+.pk-burger{display:none;flex-direction:column;gap:6px;background:none;border:none;cursor:pointer;z-index:1001;padding:10px}
+.pk-burger span{display:block;width:28px;height:3px;background:var(--dark);transition:all .3s ease;border-radius:3px}
+.pk-mobile-menu{display:none;flex-direction:column;background:rgba(255,255,255,.98);backdrop-filter:blur(15px);position:absolute;top:100%;left:0;right:0;padding:20px;border-bottom:1px solid rgba(9,17,13,.1);box-shadow:0 20px 40px rgba(0,0,0,.1);opacity:0;transform:translateY(-10px);transition:all .3s ease;pointer-events:none;z-index:999}
+.pk-mobile-menu a{padding:16px 15px;font-size:18px;font-weight:700;color:var(--dark);text-align:center;border-bottom:1px solid rgba(0,0,0,.05);text-decoration:none}
+.pk-mobile-menu a.pk-btn-yellow{border-bottom:none;margin-top:15px;border:2px solid var(--yd);box-shadow:0 4px 0 var(--yd)}
+.pk-mobile-menu.open{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
+.pk-burger.open span:nth-child(1){transform:translateY(9px) rotate(45deg)}
+.pk-burger.open span:nth-child(2){opacity:0}
+.pk-burger.open span:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
+
+.demo-input{width:100%;padding:14px 16px;border:1px solid rgba(9,17,13,.15);border-radius:12px;font-size:15px;color:var(--dark);background:#fff;outline:none;font-family:inherit;transition:border-color .2s,box-shadow .2s}
+.demo-input:focus{border-color:var(--yd);box-shadow:0 0 0 4px rgba(225,255,38,.2)}
+.demo-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2309110D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+
+/* ============================================================
+   RESPONSIVE — PAGE ACCUEIL
+============================================================ */
+@media(max-width:1024px){
+  .pk-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:991px){
+  .pk-nav{display:none !important}
+  .pk-burger{display:flex}
+  .home-hero-container{height:500px !important}
+  .home-hero-img{width:600px !important;top:160px !important}
+  .home-hero-h1{font-size:72px !important}
+  .home-hero-p{font-size:60px !important}
+  .home-logos-grid{grid-template-columns:repeat(3,1fr) !important}
+  .home-prod-grid{grid-template-columns:1fr !important}
+  .home-testi-grid{grid-template-columns:1fr !important}
+  .home-reviews-grid{grid-template-columns:1fr !important}
+  .home-it-grid{grid-template-columns:1fr !important}
+  .home-it-grid > div:last-child{order:-1}
+  .home-cas-grid{grid-template-columns:1fr !important}
+  .home-cas-stats-grid{grid-template-columns:1fr !important}
+  .home-cas-stats-grid > div{border-right:none !important;border-bottom:1px solid rgba(9,17,13,.08);padding:15px 0 !important}
+  .home-cas-stats-grid > div:last-child{border-bottom:none !important}
+  .home-cta-wrapper{height:auto !important;display:flex !important;flex-direction:column-reverse !important;align-items:center !important}
+  .home-cta-dark{position:relative !important;height:auto !important;width:100% !important;padding:60px 20px !important}
+  .home-cta-dark-content{position:relative !important;left:0 !important;top:0 !important;width:100% !important;text-align:center;align-items:center}
+  .home-cta-img{position:relative !important;left:0 !important;width:100% !important;height:350px !important;justify-content:center !important}
+  .home-final-kpi-grid{grid-template-columns:1fr !important;gap:40px}
+  .home-footer-top{grid-template-columns:1fr 1fr !important;gap:40px}
+  .home-footer-contact{grid-column:1 / -1}
+  .home-hero-pill-sg,.home-hero-pill-qb{display:none !important}
+  .home-footer-top,.sg-footer-top,.qb-footer-top{display:flex !important;flex-direction:column !important;text-align:center !important;align-items:center !important;gap:40px !important}
+  .home-footer-bottom,.sg-footer-bottom,.qb-footer-bottom{flex-direction:column !important;align-items:center !important;text-align:center !important;gap:20px !important}
+  .home-footer-contact > div{flex-direction:column !important;text-align:center !important}
+  .pk-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:767px){
+  html,body{overflow-x:hidden !important}
+  section{overflow-x:hidden !important;padding:40px 20px !important}
+  h1{font-size:40px !important;line-height:1.1 !important}
+  h2{font-size:34px !important;line-height:1.2 !important}
+  h3{font-size:24px !important;line-height:1.2 !important}
+  .pk-bar{white-space:normal !important;flex-wrap:wrap !important;text-align:center !important;justify-content:center !important;padding:12px 15px !important;height:auto !important;line-height:1.5 !important}
+  .pk-bar .badge{flex-shrink:0 !important;margin-bottom:2px}
+  .home-hero-container{overflow:visible !important;height:680px !important;margin-bottom:20px !important}
+  .home-hero-img{width:110vw !important;max-width:480px !important;top:200px !important}
+  .home-hero-badges{flex-direction:column;width:100%}
+  .home-hero-title-wrap{top:100px !important;white-space:normal !important;width:100%}
+  .home-hero-h1{font-size:44px !important}
+  .home-hero-p{font-size:34px !important}
+  .home-hero-desc{font-size:17px !important}
+  .home-hero-btns{flex-direction:column;width:100%}
+  .home-hero-btns a{width:100% !important;min-width:100% !important}
+  .home-hero-container + div{display:flex !important;flex-direction:column !important;align-items:center !important;width:100% !important;gap:12px !important}
+  .home-logos-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important;width:100% !important;box-sizing:border-box !important}
+  .home-logos-grid > div{height:75px !important;padding:12px !important;width:100% !important;min-width:0 !important;display:flex !important;justify-content:center !important;align-items:center !important}
+  .home-logos-grid img{max-width:100% !important;max-height:100% !important;object-fit:contain !important}
+  .home-it-feat-grid{grid-template-columns:1fr !important}
+  .home-it-kpi-grid{grid-template-columns:1fr !important;gap:30px}
+  .home-it-kpi-grid > div{border-left:none !important;border-top:1px solid rgba(255,255,255,.1) !important;padding:20px 0 0 0 !important;text-align:center}
+  .home-cas-info-grid{grid-template-columns:1fr !important}
+  .home-cas-grid > div{padding:30px 20px !important}
+  .home-google-score{height:auto !important;padding:30px 20px !important;display:flex !important;flex-direction:column;align-items:center;gap:15px}
+  .home-google-score > div{position:relative !important;left:0 !important;top:0 !important;transform:none !important;text-align:center;width:100%}
+  .home-google-score > div:nth-child(2) > div:first-child{justify-content:center !important}
+  .home-cta-dark h2{font-size:42px !important}
+  .home-final-kpi-grid > div{border-top:1px solid rgba(9,17,13,.1) !important;padding:30px 0 0 0 !important;text-align:center}
+  .home-footer-top{grid-template-columns:1fr !important}
+  .home-footer-contact{height:auto !important;padding:30px 20px !important}
+  .home-footer-contact > div{flex-direction:column;text-align:center}
+  .home-footer-bottom{flex-direction:column;align-items:center !important;text-align:center;gap:20px}
+  .home-footer-bottom > div:first-child{align-items:center !important;text-align:center !important}
+  h2.pk-h2,.pk-h2-center{font-size:38px !important}
+  .pk-stats{grid-template-columns:1fr !important;gap:20px}
+  .pk-stat::after{display:none !important}
+  .home-hero-pill-sg,.home-hero-pill-qb{display:none !important}
+}
+  </style>
+</head>
+<body>
+
+<div class="pk-bar">
+  <span class="badge">NOUVEAU</span>
+  <span>+50 magasins déployés · 🇫🇷 Conçu, hébergé et opéré en France</span>
+</div>
+
+<header class="pk-header">
+  <div class="pk-header-inner">
+    <a href="/" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
+    <nav class="pk-nav desktop-nav">
+      <a href="/">Accueil</a>
+      <a href="/scan-go">Scan&amp;Go</a>
+      <a href="/queue-busting">Queue Busting</a>
+      <a href="/demo" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+    </nav>
+    <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="pk-mobile-menu" id="mobileMenu">
+    <a href="/">Accueil</a>
+    <a href="/scan-go">Scan&amp;Go</a>
+    <a href="/queue-busting">Queue Busting</a>
+    <a href="/demo" class="pk-btn-yellow">Planifier une démo</a>
+  </div>
+</header>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.querySelector('.pk-burger').classList.toggle('open');
+  }
+</script>
+
+<!-- ===== HERO ===== -->
+<section style="position:relative;padding:96px 0 70px">
+
+  <div style="position:absolute;left:50%;top:-181px;transform:translateX(calc(-50% - 49.5px));width:927px;height:927px;background:radial-gradient(circle,rgba(225,255,38,.34) 0%,rgba(255,207,38,.2) 50%,transparent 67%);opacity:.5;filter:blur(1px);pointer-events:none"></div>
+
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:22px">
+
+    <div class="home-hero-container" style="position:relative;width:100%;height:764px;overflow:hidden;flex-shrink:0">
+
+      <img class="home-hero-img" src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89988e02e252034e1d2e5_encaissement_simple_rapide.png" alt="Encaissement simple et rapide" style="position:absolute;top:117px;left:50%;transform:translateX(-50%);width:827px;height:auto;z-index:1"/>
+
+      <div class="home-hero-badges" style="position:absolute;top:0;left:50%;transform:translateX(calc(-50% + 0.5px));z-index:2;display:flex;align-items:center;gap:10px">
+        <span class="pk-tag"><span class="dot"></span>Encaissement nouvelle génération</span>
+        <span style="display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.7);backdrop-filter:blur(7px);border:1px solid rgba(9,17,13,.08);box-shadow:0 6px 18px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+          <span style="display:inline-flex;overflow:hidden;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.15);width:18px;height:13px;flex-shrink:0"><span style="flex:1;background:#0055a4"></span><span style="flex:1;background:#fff"></span><span style="flex:1;background:#ef4135"></span></span>
+          Conçu, hébergé et opéré en France
+        </span>
+      </div>
+
+      <div class="home-hero-title-wrap" style="position:absolute;top:60px;left:50%;transform:translateX(-50%);z-index:2;text-align:center;white-space:nowrap">
+        <h1 class="home-hero-h1" style="font-size:102px;font-weight:900;line-height:.81;letter-spacing:-.072em;color:var(--dark);margin:0">L'encaissement</h1>
+        <p class="home-hero-p" style="font-size:86px;font-weight:900;line-height:.81;letter-spacing:-.072em;color:var(--dark);margin:0">Plus simple, plus rapide</p>
+      </div>
+
+      <!-- Card flottante Scan&Go — rotate(-9.52deg) -->
+      <div class="home-hero-pill-sg" style="position:absolute;left:calc(50% - 430px);top:295px;z-index:3;transform:rotate(-9.52deg);padding:13px 19px;border-radius:16px;border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(9px);background:rgba(255,255,255,.68);box-shadow:0 18px 50px rgba(9,17,13,.08),inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;gap:10px;white-space:nowrap">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f78fe132959c3c6db48_logo_app_pikkopay.svg" style="width:30px;height:30px;border-radius:7px;flex-shrink:0;object-fit:contain" alt=""/>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--mid);line-height:1;margin-bottom:3px">Côté client</div>
+          <div style="font-size:13px;font-weight:900;color:var(--dark);line-height:1.2">Scan&amp;Go</div>
+        </div>
+      </div>
+
+      <!-- Card flottante Queue Busting — rotate(11.3deg) -->
+      <div class="home-hero-pill-qb" style="position:absolute;right:calc(50% - 430px);top:345px;z-index:3;transform:rotate(11.3deg);padding:13px 19px;border-radius:16px;border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(9px);background:rgba(255,255,255,.68);box-shadow:0 18px 50px rgba(9,17,13,.08),inset 0 1px 0 rgba(255,255,255,.9);display:flex;align-items:center;gap:8px;white-space:nowrap">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f75b885bd112d9027ec_Queue_busting.svg" style="width:30px;height:30px;border-radius:7px;flex-shrink:0;object-fit:contain" alt=""/>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:var(--mid);line-height:1;margin-bottom:3px">Côté collaborateur</div>
+          <div style="font-size:13px;font-weight:900;color:var(--dark);line-height:1.2">Queue Busting</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:24px">
+      <span style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:var(--mid)"><span style="color:#0B9A5B;font-weight:900">✓</span> Déploiement en 14 jours</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:var(--mid)"><span style="color:#0B9A5B;font-weight:900">✓</span> Aucun investissement matériel</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:var(--mid)"><span style="color:#0B9A5B;font-weight:900">✓</span> Compatible toutes caisses</span>
+    </div>
+
+    <p class="home-hero-desc" style="font-size:21px;font-weight:400;line-height:1.5;color:var(--mid);max-width:982px;text-align:center">
+      PikkoPay distribue l'encaissement partout dans le magasin : sur le smartphone du client,
+      dans la main du collaborateur. Plus de capacité, moins de friction, sans matériel lourd.
+    </p>
+
+    <div class="home-hero-btns" style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+      <a href="/demo" class="pk-btn-yellow" style="min-width:270px;font-size:16px">Planifier une démo</a>
+      <a href="/scan-go" class="pk-btn-ghost" style="min-width:270px">Découvrir PikkoPay</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== STATS + LOGOS DARK ===== -->
+<section class="pk-section-dark" style="padding:96px 20px;text-align:center;background:var(--bleu)">
+
+  <div style="margin-bottom:96px">
+    <div class="pk-stats" style="background:linear-gradient(137deg,rgba(225,255,38,.12) 0%,rgba(225,255,38,0) 45%,rgba(255,207,38,.12) 100%),#fff;border:1px solid rgba(255,255,255,.78);box-shadow:0 30px 90px rgba(7,16,11,.12),inset 0 1px 0 1px rgba(255,255,255,.85);backdrop-filter:blur(13px)">
+      <div class="pk-stat"><div class="pk-stat-val">12s</div><div class="pk-stat-lbl">vs 1m30 en caisses traditionnelles</div></div>
+      <div class="pk-stat"><div class="pk-stat-val">+25%</div><div class="pk-stat-lbl">Capacité d'encaissement</div></div>
+      <div class="pk-stat"><div class="pk-stat-val">0</div><div class="pk-stat-lbl">Matériel lourd à installer</div></div>
+      <div class="pk-stat"><div class="pk-stat-val">14 jrs</div><div class="pk-stat-lbl">Pour activer un magasin</div></div>
+    </div>
+  </div>
+
+  <div class="pk-w">
+    <h2 class="pk-h2 pk-h2-center">Déjà adopté par les enseignes alimentaires.</h2>
+    <p class="pk-sub pk-sub-center" style="margin-bottom:20px">+50 magasins déployés en conditions réelles.</p>
+    <div class="home-logos-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:var(--w);margin:0 auto">
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a1a6b21e024c69d35_logo_intermarche.png" alt="Intermarché" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Intermarché</b>'"/></div>
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998b9b374b2c82a57e68_Logo_supermarch%C3%A9_Match.svg" alt="Match" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Match</b>'"/></div>
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89989daa3d3821a6d07b0_logo_carrefour_market.png" alt="Carrefour Market" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Carrefour</b>'"/></div>
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998947c676c6807e39a7_logo_carrefour_proximit%C3%A9.png" alt="Carrefour Proximité" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Carrefour Proximité</b>'"/></div>
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f899891a121e61090ee584_Logo_Franprix.png" alt="Franprix" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Franprix</b>'"/></div>
+      <div class="pk-logo-item"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a3e7cc13eca3a6c6b_logo_netto.png" alt="Netto" onerror="this.outerHTML='<b style=font-size:16px;color:rgba(255,255,255,.5)>Netto</b>'"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUITS ===== -->
+<section style="padding:80px 20px" id="produits">
+  <div class="pk-w">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="pk-tag" style="display:inline-flex;margin-bottom:20px"><span class="dot"></span>Produits</div>
+      <h2 class="pk-h2 pk-h2-center">Une plateforme. Deux solutions. Zéro matériel lourd.</h2>
+      <p class="pk-sub pk-sub-center">Deux usages complémentaires pour couvrir 100% des situations magasin.</p>
+    </div>
+    <div class="home-prod-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+      <div class="pk-card" style="display:flex;flex-direction:column">
+        <div style="background:linear-gradient(135deg,rgba(225,255,38,.12),rgba(255,207,38,.08));border-bottom:1px solid rgba(9,17,13,.06);overflow:hidden">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89988037d2e9075ec055e_cote_client_pikkopay.png" alt="" style="width:100%;height:240px;object-fit:cover;display:block"/>
+        </div>
+        <div style="padding:30px;display:flex;flex-direction:column;flex:1">
+          <div style="font-size:13px;color:var(--mid);margin-bottom:8px">Côté client · PikkoPay</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:26px;font-weight:900;letter-spacing:-.03em;margin-bottom:14px">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f78fe132959c3c6db48_logo_app_pikkopay.svg" style="width:31px;height:31px;border-radius:6.5px;flex-shrink:0;object-fit:contain" alt=""/>
+            Scan&amp;Go
+          </div>
+          <p style="font-size:16px;line-height:1.5;color:var(--mid);margin-bottom:20px">Supprimez les files d'attente, sans limite de matériel ni de personnel. Le smartphone de vos clients se transforme en caisse automatique avec un simple QR code.</p>
+          <ul class="pk-list">
+            <li><span class="pk-dot"></span>Jusqu'à 240 tickets/heure traités</li>
+            <li><span class="pk-dot"></span>Application native + WebApp sans téléchargement</li>
+            <li><span class="pk-dot"></span>Paiement intégré : CB, Apple Pay, Google Pay, titres-restaurant</li>
+            <li><span class="pk-dot"></span>Limite d'articles + Système de contrôle adapté</li>
+          </ul>
+          <div style="margin-top:auto;padding:30px 0 10px">
+            <a href="/scan-go" class="pk-btn-yellow">Découvrir Scan&amp;Go <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pk-card" style="display:flex;flex-direction:column">
+        <div style="background:linear-gradient(135deg,rgba(225,255,38,.12),rgba(255,207,38,.08));border-bottom:1px solid rgba(9,17,13,.06);overflow:hidden">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89988d706088c0210268c_cote_collaborateur_pikkoboost.png" alt="" style="width:100%;height:240px;object-fit:cover;display:block"/>
+        </div>
+        <div style="padding:30px;display:flex;flex-direction:column;flex:1">
+          <div style="font-size:13px;color:var(--mid);margin-bottom:8px">Côté collaborateur · PikkoBoost</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:26px;font-weight:900;letter-spacing:-.03em;margin-bottom:14px">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f75b885bd112d9027ec_Queue_busting.svg" style="width:31px;height:31px;object-fit:contain;border-radius:6.5px" alt=""/>
+            Queue Busting
+          </div>
+          <p style="font-size:16px;line-height:1.5;color:var(--mid);margin-bottom:20px">Transformez temporairement vos appareils Zebra ou smartphones magasin en caisse mobile pour absorber les pics d'activité inattendu.</p>
+          <ul class="pk-list">
+            <li><span class="pk-dot"></span>Sans nouveau matériel — Compatible Android et iOS</li>
+            <li><span class="pk-dot"></span>Encaissement sans contact Tap to Pay</li>
+            <li><span class="pk-dot"></span>Ticket imprimé ou envoyé par mail au client</li>
+            <li><span class="pk-dot"></span>Activation à la demande par appareil</li>
+          </ul>
+          <div style="margin-top:auto;padding:30px 0 10px">
+            <a href="/queue-busting" class="pk-btn-yellow">Découvrir Queue Busting <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== TÉMOIGNAGES ===== -->
+<section style="padding:80px 20px 200px">
+  <div class="pk-w">
+    <h2 class="pk-h2 pk-h2-center">Ce que disent les magasins</h2>
+    <div class="home-testi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px">
+      <div style="background:#fff;border:1px solid rgba(9,17,13,.07);border-radius:20px;padding:31px;display:flex;flex-direction:column;position:relative"><div style="font-size:56px;line-height:1;color:rgba(9,17,13,.15);font-family:'Inter',sans-serif;position:absolute;left:17px">"</div><p style="font-size:15px;line-height:1.7;color:var(--dark);margin-bottom:28px;padding-top:10px;flex:1">On a absorbé le rush du midi sans ouvrir de caisse supplémentaire. C'est devenu un réflexe pour les clients.</p><div style="display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid rgba(9,17,13,.07)"><div class="pk-avatar" style="font-size:13px">IM</div><div><div style="font-size:13px;font-weight:700">Directeur magasin</div><div style="font-size:13px;color:var(--mid)">Intermarché</div></div></div></div>
+      <div style="background:#fff;border:1px solid rgba(9,17,13,.07);border-radius:20px;padding:31px;display:flex;flex-direction:column;position:relative"><div style="font-size:56px;line-height:1;color:rgba(9,17,13,.15);font-family:'Inter',sans-serif;position:absolute;left:17px">"</div><p style="font-size:15px;line-height:1.7;color:var(--dark);margin-bottom:28px;padding-top:10px;flex:1">Les clients adorent. On le voit directement dans nos avis Google et dans le trafic en magasin.</p><div style="display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid rgba(9,17,13,.07)"><div class="pk-avatar" style="font-size:13px">SM</div><div><div style="font-size:13px;font-weight:700">Responsable magasin</div><div style="font-size:13px;color:var(--mid)">Supermarché Match</div></div></div></div>
+      <div style="background:#fff;border:1px solid rgba(9,17,13,.07);border-radius:20px;padding:31px;display:flex;flex-direction:column;position:relative"><div style="font-size:56px;line-height:1;color:rgba(9,17,13,.15);font-family:'Inter',sans-serif;position:absolute;left:17px">"</div><p style="font-size:15px;line-height:1.7;color:var(--dark);margin-bottom:28px;padding-top:10px;flex:1">Ultra simple à déployer. L'impact est visible dès les premiers jours sur le flux client.</p><div style="display:flex;align-items:center;gap:12px;padding-top:20px;border-top:1px solid rgba(9,17,13,.07)"><div class="pk-avatar" style="font-size:13px">CF</div><div><div style="font-size:13px;font-weight:700">Franchisé</div><div style="font-size:13px;color:var(--mid)">Carrefour</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== IT INTÉGRATION ===== -->
+<section class="pk-section-dark" style="padding:68px 20px;background:var(--bleu)">
+  <div class="pk-w">
+    <div class="home-it-grid" style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:54px;align-items:center">
+
+      <div>
+        <div class="pk-tag" style="display:inline-flex;margin-bottom:20px"><span class="dot"></span>Intégration IT</div>
+        <h2 class="pk-h2" style="font-size:68px;line-height:1;letter-spacing:-4.76px;margin-bottom:0">On ne remplace pas votre système caisse. On l'augmente.</h2>
+        <p class="pk-sub" style="font-size:23px;padding-top:16px;margin-bottom:0">PikkoPay s'intègre à l'écosystème IT existant :</p>
+        <div class="home-it-feat-grid" style="display:grid;grid-template-columns:1fr 1fr;column-gap:26px;row-gap:16px;padding-top:34px">
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">ⓘ</div>Informations produits</div>
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">%</div>Moteur de promotions</div>
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">↔</div>Services de paiements</div>
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">€</div>Prix de vente en direct</div>
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">▤</div>Tickets &amp; factures</div>
+          <div style="display:flex;align-items:center;gap:13px;font-size:17px;font-weight:700;color:#fff"><div style="width:38px;height:38px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,rgba(225,255,38,.18),rgba(255,207,38,.18));border:1px solid rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(9,17,13,.06);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff">⚙</div>Programme de fidélité</div>
+        </div>
+      </div>
+
+      <!-- Diagramme IT — pure CSS -->
+      <div style="border-radius:42px;border:1px solid rgba(255,255,255,.06);background:#0a0d1a;box-shadow:0 40px 120px rgba(0,0,0,.6);overflow:hidden;aspect-ratio:608/520;position:relative;min-height:360px">
+
+        <!-- Grille de fond -->
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none"></div>
+
+        <!-- Halo central -->
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;background:radial-gradient(circle,rgba(225,255,38,.18) 0%,transparent 70%);pointer-events:none"></div>
+
+        <!-- Lignes de connexion SVG -->
+        <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 608 520" preserveAspectRatio="xMidYMid meet">
+          <line x1="304" y1="205" x2="304" y2="92" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="278" y1="232" x2="160" y2="162" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="268" y1="272" x2="160" y2="342" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="330" y1="232" x2="448" y2="162" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="340" y1="272" x2="448" y2="342" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="289" y1="308" x2="186" y2="448" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+          <line x1="319" y1="308" x2="422" y2="448" stroke="rgba(255,255,255,.18)" stroke-width="1.5" stroke-dasharray="5,5"/>
+        </svg>
+
+        <!-- Centre : logo PikkoPay -->
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;background:#fff;box-shadow:0 0 0 10px rgba(225,255,38,.12),0 0 50px rgba(225,255,38,.45);display:flex;align-items:center;justify-content:center;z-index:3">
+          <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f78fe132959c3c6db48_logo_app_pikkopay.svg" style="width:56px;height:56px;object-fit:contain" alt="PikkoPay"/>
+        </div>
+
+        <!-- Nœud style helper (glassmorphism) -->
+        <!-- Haut centre : Votre système caisse -->
+        <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);text-align:center;line-height:1.3;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);white-space:nowrap;z-index:2">
+          Votre système<br/>caisse
+        </div>
+
+        <!-- Gauche haut : Catalogue -->
+        <div style="position:absolute;top:27%;left:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Catalogue
+        </div>
+
+        <!-- Gauche bas : Caisse -->
+        <div style="position:absolute;top:58%;left:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Caisse
+        </div>
+
+        <!-- Droite haut : Paiement -->
+        <div style="position:absolute;top:27%;right:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Paiement
+        </div>
+
+        <!-- Droite bas : Tickets -->
+        <div style="position:absolute;top:58%;right:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Tickets
+        </div>
+
+        <!-- Bas gauche : Promotions -->
+        <div style="position:absolute;bottom:14px;left:14%;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Promotions
+        </div>
+
+        <!-- Bas droite : Fidélité -->
+        <div style="position:absolute;bottom:14px;right:14%;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:9px 15px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.92);white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);z-index:2">
+          Fidélité
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="home-it-kpi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.1);padding-top:48px;margin-top:56px">
+      <div style="padding:0 20px;position:relative"><div style="font-size:72px;font-weight:900;line-height:1;letter-spacing:-3.6px;color:#fff">14 <span style="font-size:39.6px">jrs.</span></div><div style="font-size:14px;color:rgba(255,255,255,.6);margin-top:14px">Pour déployer et être effectif</div></div>
+      <div style="padding:0 20px;position:relative;border-left:1px solid rgba(255,255,255,.1)"><div style="font-size:72px;font-weight:900;line-height:1;letter-spacing:-3.6px;color:#fff">24/7</div><div style="font-size:14px;color:rgba(255,255,255,.6);margin-top:14px">Support opérationnel disponible</div></div>
+      <div style="padding:0 20px;border-left:1px solid rgba(255,255,255,.1)"><div style="font-size:72px;font-weight:900;line-height:1;letter-spacing:-3.6px;color:#fff">100<span style="font-size:39.6px">%</span></div><div style="font-size:14px;color:rgba(255,255,255,.6);margin-top:14px">Compatible avec votre écosystème caisse</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CAS CLIENTS ===== -->
+<section style="padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:53px">
+
+    <div style="text-align:center;max-width:820px">
+      <div class="pk-tag" style="display:inline-flex;margin-bottom:20px"><span class="dot"></span>Cas clients détaillés</div>
+      <h2 style="font-size:64px;font-weight:900;letter-spacing:-.07em;color:var(--dark);margin:0;line-height:1;text-align:center">Nos solutions en action</h2>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0px;align-items:center;width:100%">
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:rgba(255,255,255,.62);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.78);border-radius:14px;padding:7px;box-shadow:0 12px 30px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.8)">
+        <div style="background:linear-gradient(138deg,#E1FF26,#FFCF26);border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;color:var(--dark);letter-spacing:-.01em;filter:drop-shadow(0px 4px 7px rgba(225,255,38,.35));cursor:pointer">Intermarché Express · Paris intramuros</div>
+        <div style="border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;color:var(--mid);letter-spacing:-.01em;cursor:pointer">Supermarché Match · Haut de France</div>
+        <div style="border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;color:var(--mid);letter-spacing:-.01em;cursor:pointer">Carrefour Contact · Grand Est</div>
+      </div>
+
+      <div class="home-cas-grid" style="width:100%;background:rgba(255,255,255,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-bottom:none;border-radius:28px 28px 0 0;box-shadow:0 30px 90px rgba(7,16,11,.12),inset 0 1px 0 rgba(255,255,255,.85);overflow:hidden;display:grid;grid-template-columns:0.46fr 0.54fr">
+
+        <div style="background:linear-gradient(160deg,rgba(225,255,38,.1),rgba(255,207,38,.04) 40%,transparent 70%);border-right:1px solid rgba(9,17,13,.06);padding:48px 45px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.7);backdrop-filter:blur(7px);border:1px solid rgba(9,17,13,.06);margin-bottom:24px">
+              <span style="width:7px;height:7px;border-radius:3.5px;flex-shrink:0;background:linear-gradient(135deg,#E1FF26,#FFCF26);box-shadow:0 0 0 3px rgba(225,255,38,.22)"></span>
+              Intermarché Express · Paris intramuros
+            </div>
+            <h3 style="font-size:36px;font-weight:900;line-height:1.05;letter-spacing:-.045em;color:var(--dark);max-width:380px;margin-bottom:24px">Intermarché Express : absorber le pic du soir sans ouvrir une caisse en plus.</h3>
+            <p style="font-size:15.5px;line-height:1.55;color:var(--mid)">Magasin de proximité urbain qui voyait ses files s'allonger entre 12h–14h et 18h–20h. Le déploiement Scan&amp;Go avait pour objectif de fluidifier ces deux créneaux sans réorganiser l'effectif. Plusieurs mois après, le pic du soir reste perceptible mais ne génère plus de file durable.</p>
+          </div>
+          <div class="home-cas-info-grid" style="border-top:1px solid rgba(9,17,13,.1);padding-top:29px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Enseigne</div><div style="font-size:15px;font-weight:700;color:var(--dark)">Intermarché Express</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Format</div><div style="font-size:15px;font-weight:700;color:var(--dark)">Proximité urbaine · 400 m²</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Lancement</div><div style="font-size:15px;font-weight:700;color:var(--dark)">Février 2026</div></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Profil clients</div><div style="font-size:15px;font-weight:700;color:var(--dark)">Actifs urbains · snacking</div></div>
+          </div>
+        </div>
+
+        <div style="padding:48px 44px;display:flex;flex-direction:column;gap:24px">
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:18px;background:rgba(255,255,255,.85);border:1px solid rgba(9,17,13,.08);box-shadow:0 4px 12px rgba(7,16,11,.05);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);flex-shrink:0">1</div>
+            <div><div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">Le contexte</div><div style="font-size:14.5px;line-height:1.55;color:var(--mid)">Files récurrentes aux heures de pointe (entre 12h–14h et 18h–20h), avec une attente qui pouvait dépasser les 8 minutes en caisse principale. Quelques avis Google mentionnaient explicitement le temps d'attente.</div></div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:18px;background:rgba(255,255,255,.85);border:1px solid rgba(9,17,13,.08);box-shadow:0 4px 12px rgba(7,16,11,.05);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);flex-shrink:0">2</div>
+            <div><div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">Le déploiement PikkoPay</div><div style="font-size:14.5px;line-height:1.55;color:var(--mid)">Activation Scan&amp;Go en environ 4 semaines. Formation des collaborateurs sur site. Animation terrain de notre côté pendant les deux premières semaines, aux heures de pointe, pour aider les premiers utilisateurs.</div></div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:36px;height:36px;border-radius:18px;background:rgba(255,255,255,.85);border:1px solid rgba(9,17,13,.08);box-shadow:0 4px 12px rgba(7,16,11,.05);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);flex-shrink:0">3</div>
+            <div><div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px">Les résultats à 3 mois</div><div style="font-size:14.5px;line-height:1.55;color:var(--mid)">Une part significative des clients utilisateurs reviennent au-delà du 3ᵉ achat et adoptent l'usage de manière durable. Le pic du soir reste géré avec l'effectif habituel — ce qui était l'objectif principal du directeur.</div></div>
+          </div>
+
+          <div class="home-cas-stats-grid" style="background:rgba(255,255,255,.5);border:1px solid rgba(9,17,13,.06);border-radius:16px;display:grid;grid-template-columns:repeat(3,1fr);padding:25px 1px">
+            <div style="padding:0 18px;border-right:1px solid rgba(9,17,13,.08);text-align:center"><div style="font-size:30px;font-weight:900;letter-spacing:-.04em;color:var(--dark)">12 sec</div><div style="font-size:12px;font-weight:700;color:var(--mid);margin-top:5px;line-height:1.3">Temps de passage en caisse (médiane)</div></div>
+            <div style="padding:0 18px;border-right:1px solid rgba(9,17,13,.08);text-align:center"><div style="font-size:30px;font-weight:900;letter-spacing:-.04em;color:var(--dark)">+0,9★</div><div style="font-size:12px;font-weight:700;color:var(--mid);margin-top:5px;line-height:1.3">Note Google sur 4 mois</div></div>
+            <div style="padding:0 18px;text-align:center"><div style="font-size:30px;font-weight:900;letter-spacing:-.04em;color:var(--dark)">19 254€</div><div style="font-size:12px;font-weight:700;color:var(--mid);margin-top:5px;line-height:1.3">CA en 42 jours en part des transactions via Scan&amp;Go</div></div>
+          </div>
+
+          <div style="background:rgba(9,17,13,.04);border-left:3px solid #E1FF26;border-radius:14px;padding:23px 28px 24px 31px;display:flex;flex-direction:column;gap:12px">
+            <p style="font-size:15px;font-style:italic;color:var(--dark);line-height:1.55">« On voulait surtout fluidifier le pic du soir sans avoir à ouvrir une caisse en plus. C'est ce qui s'est passé. Les utilisateurs Scan&amp;Go reviennent régulièrement, c'est devenu un usage installé. »</p>
+            <div style="font-size:13px;font-weight:700;color:var(--mid)">— Directeur du magasin</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="width:100%;background:linear-gradient(134deg,rgba(225,255,38,.12),rgba(255,207,38,.08));border:1px solid rgba(225,255,38,.35);border-top:none;border-radius:0 0 28px 28px;box-shadow:0 12px 40px rgba(225,255,38,.14),inset 0 1px 0 rgba(255,255,255,.85);padding:23px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap">
+        <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid var(--yd);box-shadow:0 4px 0 var(--yd),0 10px 18px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div style="min-width:200px">
+          <div style="font-size:16px;font-weight:700;color:var(--dark);letter-spacing:-.02em">Accédez à ce cas client en PDF</div>
+          <div style="font-size:13px;font-weight:700;color:var(--mid);margin-top:2px">Document complet à partager en interne · 2 minutes</div>
+        </div>
+        <a href="#" class="pk-btn-yellow" style="font-size:14.5px;padding:16px 24px;gap:9px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Découvrir les résultats
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== AVIS GOOGLE ===== -->
+<section style="padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:30px">
+
+    <div style="text-align:center;max-width:820px">
+      <div class="pk-tag" style="display:inline-flex;margin-bottom:20px"><span class="dot"></span>Voix des clients · Avis Google vérifiés</div>
+      <h2 style="font-size:64px;font-weight:900;color:var(--dark);letter-spacing:-.07em;margin:0;line-height:1">Ceux qui ont changé d'avis sur leur supermarché.</h2>
+      <p style="font-size:20px;color:var(--mid);text-align:center;padding-top:16px;max-width:720px;margin:0 auto;line-height:1.5">L'effet PikkoPay sur la perception magasin. En moyenne, les magasins équipés gagnent +0,8 étoile sur Google dans les 6 mois suivant le déploiement.</p>
+    </div>
+
+    <div class="home-google-score" style="position:relative;width:680px;max-width:100%;height:185px;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:22px;box-shadow:0 18px 50px rgba(7,16,11,.07),inset 0 1px 0 rgba(255,255,255,.85)">
+      <div style="position:absolute;left:calc(50% - 200px);top:calc(50% - 22.75px);transform:translateY(-50%);width:46px;height:46px;background:#fff;border-radius:12px;box-shadow:0 4px 7px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89989e839408d0f73af67_logo_google.svg" style="width:28px;height:28px" alt="Google"/>
+      </div>
+      <div style="position:absolute;left:50%;top:calc(50% - 22.5px);transform:translate(calc(-50% + 39px), -50%);display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:34px;font-weight:900;letter-spacing:-.04em;color:var(--dark);line-height:1">4,7</span>
+          <span style="color:#FBBC05;font-size:18px;letter-spacing:1px;line-height:1">★★★★<span style="color:#e0e0e0">★</span></span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--mid)">Note moyenne sur les magasins déployés · 1 200+ avis</div>
+      </div>
+      <div style="position:absolute;left:50%;top:calc(50% + 47px);transform:translateX(calc(-50% + 3px));display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:rgba(11,154,91,.1);border:1px solid rgba(11,154,91,.25);font-size:13px;font-weight:700;color:var(--green-ok);white-space:nowrap">↑ +0,8 étoile depuis PikkoPay</div>
+    </div>
+
+    <div class="home-reviews-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;padding-top:10px">
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#4285F4,#1A73E8);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">J</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Jasmillaa</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 2 mois</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Application hyper facile à utiliser et très rapide ! Elle permet de commander en quelques clics et surtout d'<mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">éviter de faire la queue</mark>. Un vrai gain de temps, je recommande.</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Supermarché Match · Metz Sablon</div>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#673AB7,#452790);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">P</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Parisian Soul</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 3 mois</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Incroyable. On se croirait dans le futur avec <mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">PikkoPay</mark>. L'appli me fait gagner un temps fou tous les midis, merci !</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Intermarché · Paris 5</div>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#FF6D00,#E65100);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">B</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Baptiste F.</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 2 ans</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Merci beaucoup à <mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">PikkoPay</mark>. Personnel très professionnel. Bon courage pour votre lancement !</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Carrefour Market · Buchères</div>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#EA4335,#C5221F);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">N</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Noémie V.</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 1 mois</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Belle découverte de <mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">PikkoPay</mark> grâce à Anthony, à refaire lors de mes prochaines courses !</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Intermarché · Paris Nation</div>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#34A853,#137333);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">D</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Dejan S.</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 3 semaines</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Bravo, magnifique ! La rapidité pour <mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">ne pas faire la file d'attente</mark>, c'est un vrai plus au quotidien.</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Intermarché · Charenton</div>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.85);border-radius:20px;padding:25px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 40px rgba(7,16,11,.06),inset 0 1px 0 rgba(255,255,255,.85)">
+        <div style="display:flex;align-items:center;gap:12px"><div style="width:42px;height:42px;border-radius:21px;background:linear-gradient(135deg,#FBBC04,#F29900);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;filter:drop-shadow(0 4px 5px rgba(0,0,0,.08))">J</div><div style="flex:1;min-width:0"><span style="font-size:14.5px;font-weight:700;color:var(--dark);letter-spacing:-.01em">Jegatheswaran D.</span></div></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="color:#FBBC05;font-size:14px;letter-spacing:1px">★★★★★</span><span style="font-size:12px;font-weight:700;color:var(--mid)">il y a 1 semaine</span></div>
+        <p style="font-size:14px;line-height:1.55;color:var(--dark);flex:1;margin:0">Merci Davy pour la découverte de <mark style="background:rgba(225,255,38,.4);border-radius:3px;padding:0 2px;color:inherit;font-weight:700">PikkoPay</mark>, j'ai vraiment gagné du temps à la caisse !</p>
+        <div style="border-top:1px solid rgba(9,17,13,.08);padding-top:13px;font-size:12px;font-weight:700;color:var(--mid)">📍 Intermarché · Etienne Marcel</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA FINAL ===== -->
+<section style="padding:80px 20px" id="demo">
+  <div class="home-cta-wrapper" style="position:relative;max-width:1160px;margin:0 auto;height:640px">
+
+    <div class="home-cta-dark" style="position:absolute;bottom:0;left:0;right:0;height:499px;background:var(--bleu);border-radius:34px;overflow:hidden">
+      <div style="position:absolute;right:-160px;top:-215px;width:460px;height:460px;background:radial-gradient(circle,rgba(225,255,38,.24) 0%,rgba(255,207,38,.12) 50%,transparent 65%);pointer-events:none"></div>
+      <div class="home-cta-dark-content" style="position:absolute;left:58px;top:45px;width:500px;display:flex;flex-direction:column;gap:18px">
+        <div>
+          <h2 style="font-size:68px;font-weight:900;line-height:.96;letter-spacing:-.07em;color:#fff;margin-bottom:18px">Et si vos files d'attente devenaient optionnelles ?</h2>
+          <p style="font-size:21px;color:rgba(255,255,255,.68);line-height:1.5;max-width:444px">Démo personnalisée de 30 minutes avec un de nos experts retail.</p>
+        </div>
+        <a href="/demo" style="display:flex;align-items:center;justify-content:center;padding:16px 22px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid #0B1209;box-shadow:0 6px 0 #0B1209,0 14px 24px rgba(0,0,0,.22);text-decoration:none;width:100%;box-sizing:border-box">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div class="home-cta-img" style="position:absolute;left:489px;top:0;width:726px;height:646px;pointer-events:none;overflow:visible;display:flex;align-items:flex-end;justify-content:flex-end">
+      <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69fb1f7891778d1fbbdb93d0_final_cta_home.png" alt="" style="width:100%;height:100%;object-fit:contain;object-position:bottom right"/>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== LOGOS + KPIs FINAUX ===== -->
+<section style="padding:96px 20px">
+  <div class="pk-w" style="display:flex;flex-direction:column;align-items:center;gap:20px;position:relative">
+
+    <div style="text-align:center">
+      <h2 style="font-size:68px;font-weight:900;letter-spacing:-.07em;color:var(--dark);margin:0;line-height:1">Déjà adopté par les enseignes alimentaires.</h2>
+      <p style="font-size:21px;color:var(--mid);text-align:center;padding-top:16px;margin:0">+50 magasins déployés en conditions réelles.</p>
+    </div>
+
+    <div class="home-logos-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;width:100%">
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a1a6b21e024c69d35_logo_intermarche.png" alt="Intermarché" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998b9b374b2c82a57e68_Logo_supermarch%C3%A9_Match.svg" alt="Match" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f89989daa3d3821a6d07b0_logo_carrefour_market.png" alt="Carrefour Market" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998947c676c6807e39a7_logo_carrefour_proximit%C3%A9.png" alt="Carrefour Proximité" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f899891a121e61090ee584_Logo_Franprix.png" alt="Franprix" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+      <div style="background:#fff;border-radius:16px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a3e7cc13eca3a6c6b_logo_netto.png" alt="Netto" style="height:36px;width:auto;object-fit:contain"/>
+      </div>
+    </div>
+
+    <div class="home-final-kpi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);width:100%;margin-top:28px">
+      <div style="padding:0 20px;position:relative">
+        <div style="line-height:1;margin-bottom:14px"><span style="font-size:72px;font-weight:900;letter-spacing:-3.6px;color:var(--dark)">14 </span><span style="font-size:39.6px;font-weight:900;letter-spacing:-.02em;color:var(--mid)">jrs.</span></div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Pour déployer et être effectif</div>
+        <div style="position:absolute;right:0;top:8px;width:1px;height:80px;background:linear-gradient(180deg,transparent,rgba(9,17,13,.12) 50%,transparent)"></div>
+      </div>
+      <div style="padding:0 20px;position:relative">
+        <div style="font-size:72px;font-weight:900;letter-spacing:-3.6px;color:var(--dark);line-height:1;margin-bottom:14px">24/7</div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Support opérationnel disponible</div>
+        <div style="position:absolute;right:0;top:8px;width:1px;height:80px;background:linear-gradient(180deg,transparent,rgba(9,17,13,.12) 50%,transparent)"></div>
+      </div>
+      <div style="padding:0 20px">
+        <div style="line-height:1;margin-bottom:14px"><span style="font-size:72px;font-weight:900;letter-spacing:-3.6px;color:var(--dark)">100</span><span style="font-size:39.6px;font-weight:900;letter-spacing:-.02em;color:var(--mid)">%</span></div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--mid)">Compatible avec votre écosystème caisse</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="padding-top:28px;padding:28px 20px 0">
+  <div style="max-width:1380px;margin:0 auto;background:var(--bleu);border-radius:46px 46px 0 0;padding:58px 64px 42px;position:relative;overflow:hidden;box-shadow:0 -30px 100px rgba(9,17,13,.18)">
+
+    <div style="position:absolute;right:-200px;top:-232px;width:620px;height:620px;background:radial-gradient(circle,rgba(225,255,38,.28) 0%,rgba(255,207,38,.16) 50%,transparent 65%);pointer-events:none"></div>
+
+    <div class="home-footer-top" style="display:grid;grid-template-columns:300px 300px 1fr;gap:0;margin-bottom:34px;min-height:235px">
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">L'encaissement 2.0</div>
+        <a href="/scan-go" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Scan&amp;Go</a>
+        <a href="/queue-busting" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Queue Busting</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">Contact</div>
+        <a href="/demo" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Demander une démo</a>
+        <a href="mailto:contact@pikkopay.fr" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">contact@pikkopay.fr</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Mentions légales</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">RGPD</a>
+        <a href="#" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Politique de confidentialité</a>
+      </div>
+
+      <div class="home-footer-contact" style="position:relative;background:rgba(255,255,255,.08);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:34px;height:235px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;padding:0 36px">
+        <div style="display:flex;align-items:center;gap:27px">
+          <div style="width:111px;height:111px;border-radius:50%;border:5px solid #fff;overflow:hidden;flex-shrink:0;background:linear-gradient(170deg,#FFCF26,#E1FF26)">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998cad4a130f604d98b6_photo_alexandre.png" alt="Alexandre" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="font-size:38px;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">Contactez nous !</h3>
+            <a href="/demo" style="display:inline-flex;align-items:center;gap:13px;padding:15px 21px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.92);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.9);text-decoration:none;white-space:nowrap">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="height:1px;background:rgba(255,255,255,.14);margin-bottom:34px"></div>
+
+    <div class="home-footer-bottom" style="display:flex;align-items:center;justify-content:space-between;gap:20px">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:300px">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a9ddecf6ef5ac5d7a_logo_pikkopay_horizontal_white_yellow.svg" alt="PikkoPay" style="height:28px;width:auto;display:block"/>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.8);line-height:1.5">La nouvelle génération d'encaissement pour le retail alimentaire. Conçu, développé et opéré en France.</p>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.25);font-size:12.5px;font-weight:700;color:#fff;width:fit-content">
+          <span style="display:inline-flex;overflow:hidden;border-radius:2px;box-shadow:0 1px 3px rgba(0,0,0,.15);width:18px;height:13px;flex-shrink:0">
+            <span style="flex:1;background:#0055a4"></span><span style="flex:1;background:#fff"></span><span style="flex:1;background:#ef4135"></span>
+          </span>
+          Conçu, hébergé et opéré en France
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;align-items:center">
+        <a href="https://www.linkedin.com/in/alexandre-chen/" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">in</a>
+        <a href="#" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">x</a>
+        <a href="#" style="width:38px;height:38px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;text-decoration:none">◎</a>
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.78)">© 2026 Tous droits réservés.</div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
