@@ -49,7 +49,9 @@
       "Bash(Start-Process \"http://localhost:5500/03-queue-busting.html\")",
       "PowerShell(cd \"c:\\\\Users\\\\andri\\\\Documents\\\\0 - Pikkopay\\\\14 -  Refonte du site internet\\\\preview\"; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"python -m http.server 5500\" -WindowStyle Minimized; Start-Sleep 2; Start-Process \"http://localhost:5500/02-scan-go.html\"; Start-Process \"http://localhost:5500/03-queue-busting.html\")",
       "Bash(python3 -c ' *)",
-      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\andri\\\\Documents\\\\0 - Pikkopay\\\\14 -  Refonte du site internet\\\\\" -Recurse -Depth 2 | Where-Object {!$_.PSIsContainer} | Select-Object FullName | Sort-Object FullName)"
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\andri\\\\Documents\\\\0 - Pikkopay\\\\14 -  Refonte du site internet\\\\\" -Recurse -Depth 2 | Where-Object {!$_.PSIsContainer} | Select-Object FullName | Sort-Object FullName)",
+      "Bash(npm init *)",
+      "Bash(npm install *)"
     ]
   }
 }
