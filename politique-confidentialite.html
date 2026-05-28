@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de confidentialité — PikkoPay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   PIKKOPAY — CSS PARTAGÉ (= shared.css)
+============================================================ */
+:root{--bg:#F2F5EF;--dark:#09110D;--mid:#68736D;--green-ok:#0B9A5B;--bleu:#0E0B26;--y1:#E1FF26;--y2:#FFCF26;--yd:#D9CA0C;--w:1160px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+.pk-w{width:100%;max-width:var(--w);margin:0 auto;padding:0 20px}
+.pk-btn-yellow{display:inline-flex;align-items:center;justify-content:center;padding:16px 22px;border-radius:14px;font-size:15px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid var(--yd);box-shadow:0 6px 0 var(--yd),0 14px 24px rgba(0,0,0,.22);cursor:pointer;white-space:nowrap;transition:transform .1s,box-shadow .1s}
+.pk-btn-yellow:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--yd),0 18px 28px rgba(0,0,0,.25)}
+.pk-btn-yellow:active{transform:translateY(4px);box-shadow:0 2px 0 var(--yd)}
+.pk-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.48);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.5);box-shadow:0 12px 20px rgba(9,17,13,.06)}
+.pk-header-inner{height:79px;display:flex;align-items:center;justify-content:space-between;max-width:var(--w);margin:0 auto;padding:0 20px}
+.pk-logo{display:flex;align-items:center;gap:7px;font-size:21px;font-weight:700;letter-spacing:-.5px;color:var(--dark)}
+.pk-logo img{height:30px;width:auto}
+.pk-nav{display:flex;align-items:center;gap:26px}
+.pk-nav a{font-size:16px;font-weight:700;color:var(--mid);transition:color .15s}
+.pk-nav a:hover{color:var(--dark)}
+.pk-burger{display:none;flex-direction:column;gap:6px;background:none;border:none;cursor:pointer;z-index:1001;padding:10px}
+.pk-burger span{display:block;width:28px;height:3px;background:var(--dark);transition:all .3s ease;border-radius:3px}
+.pk-mobile-menu{display:none;flex-direction:column;background:rgba(255,255,255,.98);backdrop-filter:blur(15px);position:absolute;top:100%;left:0;right:0;padding:20px;border-bottom:1px solid rgba(9,17,13,.1);box-shadow:0 20px 40px rgba(0,0,0,.1);opacity:0;transform:translateY(-10px);transition:all .3s ease;pointer-events:none;z-index:999}
+.pk-mobile-menu a{padding:16px 15px;font-size:18px;font-weight:700;color:var(--dark);text-align:center;border-bottom:1px solid rgba(0,0,0,.05);text-decoration:none}
+.pk-mobile-menu a.pk-btn-yellow{border-bottom:none;margin-top:15px;border:2px solid var(--yd);box-shadow:0 4px 0 var(--yd)}
+.pk-mobile-menu.open{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
+.pk-burger.open span:nth-child(1){transform:translateY(9px) rotate(45deg)}
+.pk-burger.open span:nth-child(2){opacity:0}
+.pk-burger.open span:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
+/* Pages légales */
+.legal-hero{padding:72px 0 56px;text-align:center}
+.legal-hero h1{font-size:clamp(32px,4.5vw,62px);font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--dark);margin-bottom:14px}
+.legal-hero p{font-size:17px;color:var(--mid)}
+.legal-content{padding:0 0 100px}
+.legal-card{background:#fff;border-radius:24px;padding:48px;box-shadow:0 4px 30px rgba(9,17,13,.07);border:1px solid rgba(9,17,13,.06)}
+.legal-section{margin-bottom:44px;padding-bottom:44px;border-bottom:1px solid rgba(9,17,13,.07)}
+.legal-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.legal-section h2{font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#E1FF26,#FFCF26);font-size:13px;font-weight:900;color:var(--dark);flex-shrink:0}
+.legal-section h3{font-size:16px;font-weight:700;color:var(--dark);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(9,17,13,.06)}
+.legal-section p{font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:10px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{list-style:none;padding:0;margin:8px 0}
+.legal-section ul li{font-size:15px;color:var(--mid);line-height:1.7;padding:3px 0 3px 22px;position:relative}
+.legal-section ul li::before{content:'→';position:absolute;left:0;color:var(--yd);font-weight:700}
+.legal-section a{color:var(--bleu);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.legal-section strong{font-weight:700;color:var(--dark)}
+.legal-info-row{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.legal-info-row div{display:flex;gap:12px;font-size:15px;line-height:1.6}
+.legal-info-row div span:first-child{font-weight:700;color:var(--dark);min-width:200px;flex-shrink:0}
+.legal-info-row div span:last-child{color:var(--mid)}
+.legal-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.legal-table th{background:var(--bg);font-weight:700;color:var(--dark);padding:10px 14px;text-align:left;border:1px solid rgba(9,17,13,.08)}
+.legal-table td{padding:10px 14px;border:1px solid rgba(9,17,13,.08);color:var(--mid);vertical-align:top;line-height:1.5}
+.legal-table tr:nth-child(even) td{background:rgba(9,17,13,.02)}
+.legal-rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.legal-right-item{background:var(--bg);border-radius:12px;padding:16px;border:1px solid rgba(9,17,13,.06)}
+.legal-right-item strong{font-size:14px;font-weight:700;color:var(--dark);display:block;margin-bottom:4px}
+.legal-right-item p{font-size:13px;color:var(--mid);line-height:1.5;margin:0}
+@media(max-width:991px){.pk-nav{display:none !important}.pk-burger{display:flex}}
+@media(max-width:767px){.legal-card{padding:28px 20px}.legal-info-row div{flex-direction:column;gap:2px}.legal-info-row div span:first-child{min-width:unset}.legal-rights-grid{grid-template-columns:1fr}.legal-table{font-size:13px}.legal-table th,.legal-table td{padding:8px 10px}}
+</style>
+</head>
+<body>
+
+<header class="pk-header">
+  <div class="pk-header-inner">
+    <a href="home.html" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
+    <nav class="pk-nav desktop-nav">
+      <a href="home.html">Accueil</a>
+      <a href="scan-go.html">Scan&amp;Go</a>
+      <a href="queue-busting.html">Queue Busting</a>
+      <a href="demo.html" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+    </nav>
+    <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="pk-mobile-menu" id="mobileMenu">
+    <a href="home.html">Accueil</a>
+    <a href="scan-go.html">Scan&amp;Go</a>
+    <a href="queue-busting.html">Queue Busting</a>
+    <a href="demo.html" class="pk-btn-yellow">Planifier une démo</a>
+  </div>
+</header>
+
+<script>function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.pk-burger').classList.toggle('open')}</script>
+
+<!-- ===== HERO ===== -->
+<section class="legal-hero">
+  <div class="pk-w">
+    <p style="font-size:13px;font-weight:700;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">RGPD &amp; Données personnelles</p>
+    <h1>Politique de confidentialité</h1>
+    <p>Mise à jour du 26 juillet 2023</p>
+  </div>
+</section>
+
+<!-- ===== CONTENU ===== -->
+<section class="legal-content">
+  <div class="pk-w">
+    <div class="legal-card">
+
+      <!-- Intro -->
+      <div class="legal-section">
+        <p>Vous visitez notre site web ou l'application Pikkopay : nous sommes très concernés par la protection de votre vie privée et souhaitons établir avec vous des relations de confiance.</p>
+        <p>Notre site s'adresse à des personnes âgées de <strong>18 ans et plus</strong>. Nous ne collectons pas délibérément d'informations relatives à des mineurs, lesquels ne sont pas autorisés à s'y inscrire.</p>
+        <p>Cette charte décrit la manière dont nous traitons vos données personnelles en tant qu'Utilisateur de notre site <a href="https://www.webapp.pikkopay.fr" target="_blank" rel="noopener">www.webapp.pikkopay.fr</a> sur ordinateur, smartphone, tablette, etc. ou via l'espace client. Nous nous conformons à la loi de 1978 dite « Informatique et Libertés » et au RGPD.</p>
+      </div>
+
+      <!-- 1. Responsable du traitement -->
+      <div class="legal-section">
+        <h2><span class="num">1</span> Responsable du traitement</h2>
+        <p>Notre société est responsable du traitement de vos données personnelles collectées sur notre site et met tout en œuvre pour les protéger.</p>
+        <div class="legal-info-row">
+          <div><span>Société</span><span>PIKKOPAY</span></div>
+          <div><span>Siège social</span><span>2 rue Gustave Eiffel, 10430 Rosières-près-Troyes</span></div>
+          <div><span>Téléphone</span><span>06 42 49 80 34</span></div>
+          <div><span>Email</span><span><a href="mailto:contact@pikkopay.fr">contact@pikkopay.fr</a></span></div>
+          <div><span>Directeur de publication</span><span>Vincent Terrasse</span></div>
+          <div><span>Délégué à la protection des données</span><span>Vincent Terrasse</span></div>
+        </div>
+      </div>
+
+      <!-- 2. Données collectées -->
+      <div class="legal-section">
+        <h2><span class="num">2</span> Quelles données personnelles collectons-nous ?</h2>
+        <p>Les données que nous collectons sont strictement confidentielles et nous ne les divulguons pas à des tiers.</p>
+
+        <h3>2.1 Les données que vous nous fournissez</h3>
+        <p>Nous collectons les données personnelles que vous déclarez volontairement depuis un formulaire de collecte lors de vos visites sur notre site. Elles sont relatives à votre identité et peuvent inclure :</p>
+        <ul>
+          <li>Des données de contact : civilité, nom, adresse e-mail, adresse postale, numéro de téléphone, réseaux sociaux</li>
+          <li>Vos références de connexion : nom d'utilisateur et mot de passe</li>
+          <li>Vos modes de paiement (numéro de carte de crédit par exemple)</li>
+        </ul>
+        <p>Vous pouvez choisir de ne pas soumettre les données demandées, mais cela pourra limiter votre accès au site ou aux services.</p>
+
+        <h3>2.2 Les données recueillies auprès d'autres sources</h3>
+        <p>Nous pouvons également obtenir vos coordonnées auprès d'autres parties tierces, telles que :</p>
+        <ul>
+          <li>Des réseaux sociaux lorsque vous accordez la permission aux services d'accéder à vos données</li>
+          <li>Des prestataires de services (localisation, paiement, personnalisation)</li>
+          <li>Des entreprises avec lesquelles nous offrons des services communs</li>
+          <li>Des sources accessibles publiquement et des fournisseurs de données</li>
+        </ul>
+
+        <h3>2.3 Les données de l'utilisation du service (cookies)</h3>
+        <p>Lors de votre navigation sur notre site, des cookies et autres traceurs sont déposés sur votre navigateur. Un cookie est un petit fichier stocké dans votre navigateur permettant de vous reconnaître lors de vos prochaines visites.</p>
+        <p>Nous pouvons utiliser des cookies analytiques, publicitaires et de personnalisation pour collecter automatiquement des informations telles que : l'environnement de connexion (adresse IP, navigateur, système d'exploitation), les données d'utilisation, et les informations géographiques.</p>
+        <p>Les cookies <strong>techniques et fonctionnels</strong> sont nécessaires au bon fonctionnement du site et ne requièrent pas de consentement. D'autres cookies (publicitaires, réseaux sociaux, analyse d'audience) sont soumis à votre consentement express.</p>
+        <p>Vos choix d'accepter ou refuser les cookies sont conservés pendant <strong>six (6) mois</strong>. Vous pouvez modifier vos préférences à tout moment via le lien « Gérer mes cookies » en bas de page.</p>
+      </div>
+
+      <!-- 3. Utilisation -->
+      <div class="legal-section">
+        <h2><span class="num">3</span> Comment utilisons-nous vos données ?</h2>
+        <p>Selon les relations que nous avons ensemble, nous utilisons vos données personnelles pour :</p>
+        <ul>
+          <li>Fournir, activer et gérer votre accès au site et votre utilisation de celui-ci</li>
+          <li>Traiter et répondre à une demande, une commande ou toute autre transaction</li>
+          <li>Fournir un support technique et permettre le bon fonctionnement du site</li>
+          <li>Améliorer le site et développer nos produits et services</li>
+          <li>Offrir un contenu personnalisé adapté à vos intérêts et à votre localisation</li>
+          <li>Répondre à vos demandes, recherches, commentaires et préoccupations</li>
+          <li>Notifier les modifications et mises à jour relatives aux services</li>
+          <li>Fournir des publicités ciblées et messages promotionnels correspondant à vos intérêts</li>
+          <li>Analyser les données à des fins de recherche et d'opérations commerciales</li>
+          <li>Nous conformer à nos obligations légales et faire respecter nos contrats</li>
+        </ul>
+      </div>
+
+      <!-- 4. Partage -->
+      <div class="legal-section">
+        <h2><span class="num">4</span> Avec qui partageons-nous vos données ?</h2>
+
+        <h3>4.1 Votre société</h3>
+        <p>Si vous accédez au site par l'intermédiaire de votre structure, vos données et certaines données d'utilisation peuvent être accessibles au gestionnaire de votre structure aux fins d'analyse.</p>
+
+        <h3>4.2 Applications tierces</h3>
+        <p>Nos services peuvent vous donner accès à des applications tierces. Si vous décidez d'y accéder, vos données personnelles pourront être partagées avec les éditeurs de ces applications selon leur propre politique de confidentialité.</p>
+
+        <h3>4.3 Prestataires de service</h3>
+        <p>Nous partageons des informations avec nos prestataires de services (banques, fournisseurs d'accès, conseils, prestataires informatiques et marketing). Ce partage est indispensable pour vous fournir les services attendus.</p>
+
+        <h3>4.4 Filiales ou partenaires</h3>
+        <p>Nous pouvons partager vos données avec des partenaires souhaitant vous informer de leurs produits susceptibles de présenter un intérêt pour vous. Vous gérez vos préférences de communication dans nos services.</p>
+
+        <h3>4.5 Raisons légales</h3>
+        <p>Nous divulguons également vos données si nécessaire pour : nous conformer à toute obligation légale, détecter des problèmes de sécurité ou de fraude, protéger les droits et la sécurité de notre société et de nos utilisateurs, ou dans le cadre d'une fusion ou acquisition.</p>
+      </div>
+
+      <!-- 5. Finalités -->
+      <div class="legal-section">
+        <h2><span class="num">5</span> Finalités du traitement</h2>
+        <p>Nous collectons ou traitons vos données dans le respect du RGPD pour les finalités suivantes :</p>
+        <ul>
+          <li>Répondre à l'intérêt légitime de notre société (réponse aux demandes d'information, prospection, statistiques, sécurisation)</li>
+          <li>Réaliser une vente ou répondre à votre demande préalablement à une vente</li>
+          <li>Nous conformer à toute obligation légale</li>
+          <li>Assurer l'exécution d'une tâche dans l'intérêt public</li>
+          <li>Prévenir la fraude ou permettre à nos clients de se conformer à leurs obligations légales</li>
+        </ul>
+      </div>
+
+      <!-- 6. Durée de conservation -->
+      <div class="legal-section">
+        <h2><span class="num">6</span> Durée de conservation</h2>
+        <table class="legal-table">
+          <thead>
+            <tr><th>Type de données</th><th>Durée de conservation</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Données prospect (dernière activité)</td><td>3 ans</td></tr>
+            <tr><td>Statistiques d'audience et de fréquentation</td><td>18 mois</td></tr>
+            <tr><td>Archivage intermédiaire (obligations légales, comptables, fiscales)</td><td>10 ans</td></tr>
+            <tr><td>Données en cas de procédure contentieuse</td><td>Durée de la procédure</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:14px">Au terme du délai de 3 ans pour les prospects, le responsable de traitement pourra reprendre contact afin de savoir si vous souhaitez continuer à recevoir des sollicitations commerciales. En l'absence de réponse positive ou explicite, vos données seront supprimées.</p>
+      </div>
+
+      <!-- 7. Sécurité et hébergement -->
+      <div class="legal-section">
+        <h2><span class="num">7</span> Sécurité et hébergement des données</h2>
+        <p>Nous appliquons des mesures techniques et organisationnelles pour assurer un niveau de sécurité approprié au risque du traitement, garantissant l'intégrité, la confidentialité et l'accessibilité des données.</p>
+        <p>Vos données sont hébergées sur les serveurs de la société <strong>OVH</strong>, situés en France au 2 rue Kellermann, 59100 Roubaix.</p>
+        <p>Dans le cadre des outils utilisés avec nos prestataires, vos données sont susceptibles de faire l'objet de transferts hors de l'Union européenne, encadrés par :</p>
+        <ul>
+          <li>Une décision d'adéquation de la Commission européenne, ou</li>
+          <li>Des Clauses Contractuelles Types approuvées par la Commission européenne garantissant un niveau de protection adéquat</li>
+        </ul>
+      </div>
+
+      <!-- 8. Préférences de communication -->
+      <div class="legal-section">
+        <h2><span class="num">8</span> Préférences de communication</h2>
+        <p>Vous pouvez personnaliser et gérer vos préférences de communication lors de votre inscription sur le site, en mettant à jour vos préférences de compte, en utilisant le mécanisme de retrait ou de désabonnement, ou en nous contactant directement.</p>
+        <p>Nous nous réservons le droit de vous avertir des modifications ou mises à jour apportées au service, le cas échéant.</p>
+      </div>
+
+      <!-- 9. Vos droits -->
+      <div class="legal-section">
+        <h2><span class="num">9</span> Vos droits</h2>
+        <p>Vous disposez des droits suivants, exercés gratuitement, garantis par le RGPD :</p>
+        <div class="legal-rights-grid">
+          <div class="legal-right-item">
+            <strong>Droit à l'information &amp; d'accès</strong>
+            <p>Accéder à l'ensemble de vos données personnelles que nous détenons.</p>
+          </div>
+          <div class="legal-right-item">
+            <strong>Droit de rectification / effacement</strong>
+            <p>Corriger ou supprimer vos données (droit à l'oubli).</p>
+          </div>
+          <div class="legal-right-item">
+            <strong>Droit à la limitation</strong>
+            <p>Restreindre le traitement dans les cas définis à l'article 18 du RGPD.</p>
+          </div>
+          <div class="legal-right-item">
+            <strong>Droit d'opposition</strong>
+            <p>Vous opposer au traitement pour motifs légitimes prévalant sur nos intérêts.</p>
+          </div>
+          <div class="legal-right-item">
+            <strong>Droit à la portabilité</strong>
+            <p>Recevoir vos données dans un format numérique structuré et lisible.</p>
+          </div>
+          <div class="legal-right-item">
+            <strong>Droit de réclamation (CNIL)</strong>
+            <p>Introduire une réclamation auprès de la CNIL : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></p>
+          </div>
+        </div>
+        <p style="margin-top:18px">Pour exercer vos droits :</p>
+        <ul>
+          <li>Par email : <a href="mailto:contact@pikkopay.fr">contact@pikkopay.fr</a></li>
+          <li>Par courrier : PIKKOPAY, 2 rue Gustave Eiffel, 10430 Rosières-près-Troyes — à l'attention du Service RGPD (joindre une copie de pièce d'identité)</li>
+        </ul>
+        <p style="margin-top:10px">Une réponse vous sera adressée dans un délai d'<strong>un (1) mois maximum</strong> suivant réception.</p>
+        <p>Les utilisateurs inscrits peuvent également clôturer leur compte via le service ou en contactant : <a href="mailto:resiliation@pikkopay.fr">resiliation@pikkopay.fr</a></p>
+      </div>
+
+      <!-- 10. Modifications -->
+      <div class="legal-section">
+        <h2><span class="num">10</span> Modifications</h2>
+        <p>Nous mettrons à jour la présente politique régulièrement. Toute modification sera postée sur cette page avec une date de révision à jour. Si nous apportons des modifications substantielles, nous vous en notifierons par le biais du service ou tout autre moyen approprié.</p>
+      </div>
+
+      <!-- 11. Contact -->
+      <div class="legal-section">
+        <h2><span class="num">11</span> Contact</h2>
+        <p>Pour toute question relative à la présente politique ou au traitement de vos données personnelles :</p>
+        <ul>
+          <li>Par email : <a href="mailto:contact@pikkopay.fr">contact@pikkopay.fr</a></li>
+          <li>Auprès de la CNIL, régulateur des données personnelles en France : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></li>
+        </ul>
+      </div>
+
+      <!-- 12. Sécurité de la navigation -->
+      <div class="legal-section">
+        <h2><span class="num">12</span> Sécurité de la navigation</h2>
+        <p>Nous utilisons des mesures de contrôle techniques, physiques et procédurales lors de la collecte, du traitement et du transfert de vos données. L'accès à notre site s'effectue par une <strong>connexion sécurisée HTTPS</strong>.</p>
+        <p>Vos identifiants et mot de passe sont des informations personnelles et confidentielles. Vous devez les protéger et ne les communiquer à personne. Si vous découvrez une utilisation suspecte de vos données, contactez-nous sans délai à <a href="mailto:contact@pikkopay.fr">contact@pikkopay.fr</a>.</p>
+      </div>
+
+      <!-- 13. Réseaux sociaux -->
+      <div class="legal-section">
+        <h2><span class="num">13</span> Réseaux sociaux</h2>
+        <p>Notre site comporte des liens vers certains réseaux sociaux (Instagram, YouTube, LinkedIn). L'accès à ces réseaux sociaux nécessite votre acceptation de leurs propres conditions contractuelles relatives au RGPD. Nous vous invitons à consulter leurs politiques de confidentialité respectives.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="padding-top:28px;padding:28px 20px 0">
+  <div style="max-width:1380px;margin:0 auto;background:var(--bleu);border-radius:46px 46px 0 0;padding:58px 64px 42px;position:relative;overflow:hidden;box-shadow:0 -30px 100px rgba(9,17,13,.18)">
+    <div style="position:absolute;right:-200px;top:-232px;width:620px;height:620px;background:radial-gradient(circle,rgba(225,255,38,.28) 0%,rgba(255,207,38,.16) 50%,transparent 65%);pointer-events:none"></div>
+    <div style="display:grid;grid-template-columns:300px 300px 1fr;gap:0;margin-bottom:34px;min-height:235px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">L'encaissement 2.0</div>
+        <a href="scan-go.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Scan&amp;Go</a>
+        <a href="queue-busting.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Queue Busting</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">Contact</div>
+        <a href="demo.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Demander une démo</a>
+        <a href="mailto:contact@pikkopay.fr" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">contact@pikkopay.fr</a>
+        <a href="mentions-legales.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Mentions légales</a>
+        <a href="politique-confidentialite.html" style="font-size:16px;font-weight:700;color:#E1FF26;text-decoration:none">Politique de confidentialité</a>
+        <a href="#" onclick="pkRevokeCookieConsent();return false;" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Gérer mes cookies</a>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.08);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:34px;height:235px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;padding:0 36px">
+        <div style="display:flex;align-items:center;gap:27px">
+          <div style="width:111px;height:111px;border-radius:50%;border:5px solid #fff;overflow:hidden;flex-shrink:0;background:linear-gradient(170deg,#FFCF26,#E1FF26)">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998cad4a130f604d98b6_photo_alexandre.png" alt="Alexandre" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="font-size:38px;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">Contactez nous !</h3>
+            <a href="demo.html" style="display:inline-flex;align-items:center;gap:13px;padding:15px 21px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.92);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.9);text-decoration:none;white-space:nowrap">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,.14);margin-bottom:34px"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:300px">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a9ddecf6ef5ac5d7a_logo_pikkopay_horizontal_white_yellow.svg" alt="PikkoPay" style="height:28px;width:auto;display:block"/>
+        <p style="font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.5">La nouvelle génération d'encaissement pour le retail alimentaire. Conçu, développé et opéré en France.</p>
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.78)">© 2026 Tous droits réservés.</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
