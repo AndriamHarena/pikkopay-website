@@ -96,8 +96,17 @@ img{display:block;max-width:100%}
 .pk-logo{display:flex;align-items:center;gap:7px;font-size:21px;font-weight:700;letter-spacing:-.5px;color:var(--dark)}
 .pk-logo img{height:30px;width:auto}
 .pk-nav{display:flex;align-items:center;gap:26px}
-.pk-nav a{font-size:16px;font-weight:700;color:var(--mid);transition:color .15s}
+.pk-nav a{font-size:16px;font-weight:700;color:var(--dark);transition:color .15s}
 .pk-nav a.active,.pk-nav a:hover{color:var(--dark)}
+.pk-burger{display:none;flex-direction:column;gap:6px;background:none;border:none;cursor:pointer;z-index:1001;padding:10px}
+.pk-burger span{display:block;width:28px;height:3px;background:var(--dark);transition:all .3s ease;border-radius:3px}
+.pk-mobile-menu{display:none;flex-direction:column;background:rgba(255,255,255,.98);backdrop-filter:blur(15px);position:absolute;top:100%;left:0;right:0;padding:20px;border-bottom:1px solid rgba(9,17,13,.1);box-shadow:0 20px 40px rgba(0,0,0,.1);opacity:0;transform:translateY(-10px);transition:all .3s ease;pointer-events:none;z-index:999}
+.pk-mobile-menu a{padding:16px 15px;font-size:18px;font-weight:700;color:var(--dark);text-align:center;border-bottom:1px solid rgba(0,0,0,.05);text-decoration:none}
+.pk-mobile-menu a.pk-btn-yellow{border-bottom:none;margin-top:15px;border:2px solid var(--yd);box-shadow:0 4px 0 var(--yd)}
+.pk-mobile-menu.open{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
+.pk-burger.open span:nth-child(1){transform:translateY(9px) rotate(45deg)}
+.pk-burger.open span:nth-child(2){opacity:0}
+.pk-burger.open span:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
 
 /* Section titles */
 .pk-h1{font-size:clamp(48px,6vw,102px);font-weight:900;line-height:.9;letter-spacing:-.07em;color:var(--dark);text-align:center}
@@ -236,9 +245,12 @@ img{display:block;max-width:100%}
   .pk-stats{grid-template-columns:repeat(2,1fr)}
   .pk-cta-box{grid-template-columns:1fr}
 }
+@media(max-width:991px){
+  .pk-nav{display:none !important}
+  .pk-burger{display:flex}
+}
 @media(max-width:768px){
   .pk-h1{font-size:44px}
-  .pk-nav a:not(.pk-btn-yellow){display:none}
   .pk-footer-inner{padding:40px 24px 0}
   .pk-cta-box{padding:48px 32px}
 }
@@ -489,13 +501,13 @@ img{display:block;max-width:100%}
 
 <header class="pk-header">
   <div class="pk-header-inner">
-    <a href="/" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
-    
+    <a href="01-home.html" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
+
     <nav class="pk-nav desktop-nav">
-      <a href="/">Accueil</a>
-      <a href="/scan-go">Scan&amp;Go</a>
-      <a href="/queue-busting">Queue Busting</a>
-      <a href="/demo" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+      <a href="01-home.html">Accueil</a>
+      <a href="02-scan-go.html">Scan&amp;Go</a>
+      <a href="03-queue-busting.html" class="active">Queue Busting</a>
+      <a href="04-demo.html" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
     </nav>
 
     <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
@@ -504,10 +516,10 @@ img{display:block;max-width:100%}
   </div>
 
   <div class="pk-mobile-menu" id="mobileMenu">
-    <a href="/">Accueil</a>
-    <a href="/scan-go">Scan&amp;Go</a>
-    <a href="/queue-busting">Queue Busting</a>
-    <a href="/demo" class="pk-btn-yellow">Planifier une démo</a>
+    <a href="01-home.html">Accueil</a>
+    <a href="02-scan-go.html">Scan&amp;Go</a>
+    <a href="03-queue-busting.html" class="active">Queue Busting</a>
+    <a href="04-demo.html" class="pk-btn-yellow">Planifier une démo</a>
   </div>
 </header>
 

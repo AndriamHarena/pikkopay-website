@@ -51,7 +51,10 @@
       "Bash(python3 -c ' *)",
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\andri\\\\Documents\\\\0 - Pikkopay\\\\14 -  Refonte du site internet\\\\\" -Recurse -Depth 2 | Where-Object {!$_.PSIsContainer} | Select-Object FullName | Sort-Object FullName)",
       "Bash(npm init *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(node -e \"const { chromium } = require\\('playwright'\\); \\(async \\(\\) => { const browser = await chromium.launch\\(\\); const page = await browser.newPage\\(\\); await page.setViewportSize\\({ width: 1440, height: 2000 }\\); await page.goto\\('http://localhost:8080/preview/01-home.html'\\); await page.waitForTimeout\\(1000\\); const el = await page.locator\\('.pk-stats'\\).first\\(\\); const box = await el.boundingBox\\(\\); await page.screenshot\\({ path: 'stats_fixed.png', clip: { x: 0, y: box.y - 40, width: 1440, height: box.height + 80 } }\\); await browser.close\\(\\); console.log\\('done'\\); }\\)\\(\\);\")",
+      "Bash(node -e \"const { chromium } = require\\('playwright'\\); \\(async \\(\\) => { const browser = await chromium.launch\\(\\); const page = await browser.newPage\\(\\); await page.setViewportSize\\({ width: 1440, height: 2000 }\\); await page.goto\\('http://localhost:8080/home.html'\\); await page.waitForTimeout\\(1200\\); const sections = await page.locator\\('section.pk-section-dark'\\).all\\(\\); const box = await sections[1].boundingBox\\(\\); await page.screenshot\\({ path: 'it_current.png', clip: { x: 0, y: box.y, width: 1440, height: box.height } }\\); await browser.close\\(\\); }\\)\\(\\);\")",
+      "Bash(node -e \"const { chromium } = require\\('playwright'\\); \\(async \\(\\) => { const browser = await chromium.launch\\(\\); const page = await browser.newPage\\(\\); await page.setViewportSize\\({ width: 1440, height: 4000 }\\); await page.goto\\('http://localhost:8080/home.html'\\); await page.waitForTimeout\\(1200\\); const sections = await page.locator\\('section.pk-section-dark'\\).all\\(\\); const box = await sections[1].boundingBox\\(\\); console.log\\('box:', JSON.stringify\\(box\\)\\); await page.screenshot\\({ path: 'it_current.png', clip: { x: 0, y: box.y, width: 1440, height: box.height } }\\); await browser.close\\(\\); }\\)\\(\\);\")"
     ]
   }
 }
