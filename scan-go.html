@@ -1,26 +1,35 @@
-<div class="pk-bar"><span class="badge">NOUVEAU</span><span>+50 magasins déployés · 🇫🇷 Conçu, hébergé et opéré en France</span></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan&Go – PikkoPay</title>
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
 
+<div class="pk-bar">
+  <span class="badge">NOUVEAU</span>
+  <span>+50 magasins déployés · 🇫🇷 Conçu, hébergé et opéré en France</span>
+</div>
 <header class="pk-header">
   <div class="pk-header-inner">
-    <a href="/" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
-    
+    <a href="home.html" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
     <nav class="pk-nav desktop-nav">
-      <a href="/">Accueil</a>
-      <a href="/scan-go">Scan&amp;Go</a>
-      <a href="/queue-busting">Queue Busting</a>
-      <a href="/demo" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+      <a href="home.html">Accueil</a>
+      <a href="scan-go.html" class="active">Scan&amp;Go</a>
+      <a href="queue-busting.html">Queue Busting</a>
+      <a href="demo.html" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
     </nav>
-
     <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
       <span></span><span></span><span></span>
     </button>
   </div>
-
   <div class="pk-mobile-menu" id="mobileMenu">
-    <a href="/">Accueil</a>
-    <a href="/scan-go">Scan&amp;Go</a>
-    <a href="/queue-busting">Queue Busting</a>
-    <a href="/demo" class="pk-btn-yellow">Planifier une démo</a>
+    <a href="home.html">Accueil</a>
+    <a href="scan-go.html" class="active">Scan&amp;Go</a>
+    <a href="queue-busting.html">Queue Busting</a>
+    <a href="demo.html" class="pk-btn-yellow">Planifier une démo</a>
   </div>
 </header>
 
@@ -746,3 +755,6 @@ function showStep(n){
   }
 }
 </script>
+
+</body>
+</html>
