@@ -1,0 +1,97 @@
+<!-- ==========================================================
+     PIKKOPAY — BANDEAU COOKIES RGPD
+
+     INSTRUCTIONS WEBFLOW :
+     ① Dans Webflow, cliquez sur l'icône engrenage (Settings) en haut à gauche
+     ② Allez dans l'onglet "Custom Code"
+     ③ Collez TOUT ce fichier dans la section "Footer Code"
+     ④ Cliquez "Save Changes"  puis publiez le site (Publish)
+
+     Le bandeau s'affichera automatiquement sur TOUTES les pages.
+
+     POUR LE LIEN "Gérer mes cookies" dans votre footer Webflow :
+     Ajoutez onclick="pkRevokeCookieConsent()" sur le lien souhaité.
+     ========================================================== -->
+
+<style>
+#pk-cookie-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:9998;
+  background:rgba(9,17,13,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid rgba(255,255,255,.08);padding:18px 20px;
+  transform:translateY(110%);transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+#pk-cookie-banner.pk-cb-show{transform:translateY(0)}
+.pk-cb-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.pk-cb-text{flex:1;min-width:240px;font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,.72);line-height:1.55}
+.pk-cb-text strong{color:#fff;font-weight:700}
+.pk-cb-text a{color:#E1FF26;text-decoration:underline;text-underline-offset:3px}
+.pk-cb-actions{display:flex;gap:10px;flex-shrink:0}
+.pk-cb-refuse{
+  padding:11px 20px;border-radius:11px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  color:rgba(255,255,255,.8);background:transparent;
+  border:1px solid rgba(255,255,255,.2);cursor:pointer;
+  transition:background .15s,border-color .15s;white-space:nowrap;
+}
+.pk-cb-refuse:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.38)}
+.pk-cb-accept{
+  padding:11px 20px;border-radius:11px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  color:#09110D;background:linear-gradient(180deg,#E1FF26,#FFCF26);
+  border:2px solid #D9CA0C;box-shadow:0 4px 0 #D9CA0C;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .1s,box-shadow .1s;
+}
+.pk-cb-accept:hover{transform:translateY(-1px);box-shadow:0 5px 0 #D9CA0C}
+.pk-cb-accept:active{transform:translateY(2px);box-shadow:0 2px 0 #D9CA0C}
+@media(max-width:600px){
+  .pk-cb-inner{flex-direction:column;align-items:stretch;gap:14px}
+  .pk-cb-actions{flex-direction:column}
+  .pk-cb-refuse,.pk-cb-accept{text-align:center}
+}
+</style>
+
+<div id="pk-cookie-banner" role="dialog" aria-modal="true" aria-label="Gestion des cookies">
+  <div class="pk-cb-inner">
+    <p class="pk-cb-text">
+      <strong>Gestion des cookies</strong> — Nous utilisons des cookies techniques nécessaires au bon fonctionnement du site. Avec votre accord, nous utiliserons également des cookies d'analyse d'audience pour améliorer votre expérience.
+      <a href="/politique-de-confidentialite">Politique de confidentialité</a>
+    </p>
+    <div class="pk-cb-actions">
+      <button class="pk-cb-refuse" onclick="pkCookieConsent('refused')">Tout refuser</button>
+      <button class="pk-cb-accept" onclick="pkCookieConsent('accepted')">Tout accepter</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'pk_cookie_consent';
+  var banner = document.getElementById('pk-cookie-banner');
+  if (!localStorage.getItem(KEY)) {
+    setTimeout(function(){ banner.classList.add('pk-cb-show'); }, 700);
+  }
+})();
+
+function pkCookieConsent(val) {
+  localStorage.setItem('pk_cookie_consent', val);
+  localStorage.setItem('pk_cookie_date', new Date().toISOString());
+  document.getElementById('pk-cookie-banner').classList.remove('pk-cb-show');
+  // Lorsque vous ajoutez Google Analytics (ou autre), décommentez et adaptez :
+  // if (val === 'accepted') { pkLoadAnalytics(); }
+}
+
+// Appelé par le lien "Gérer mes cookies" dans le footer
+function pkRevokeCookieConsent() {
+  localStorage.removeItem('pk_cookie_consent');
+  localStorage.removeItem('pk_cookie_date');
+  setTimeout(function(){
+    document.getElementById('pk-cookie-banner').classList.add('pk-cb-show');
+  }, 200);
+}
+
+// Utilitaire : vérifier le consentement depuis n'importe quel script
+window.pkHasConsent = function() {
+  return localStorage.getItem('pk_cookie_consent') === 'accepted';
+};
+</script>

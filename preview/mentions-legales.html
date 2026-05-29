@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentions légales — PikkoPay</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+/* ============================================================
+   PIKKOPAY — CSS PARTAGÉ (= shared.css)
+============================================================ */
+:root{--bg:#F2F5EF;--dark:#09110D;--mid:#68736D;--green-ok:#0B9A5B;--bleu:#0E0B26;--y1:#E1FF26;--y2:#FFCF26;--yd:#D9CA0C;--w:1160px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+.pk-w{width:100%;max-width:var(--w);margin:0 auto;padding:0 20px}
+.pk-btn-yellow{display:inline-flex;align-items:center;justify-content:center;padding:16px 22px;border-radius:14px;font-size:15px;font-weight:700;color:var(--dark);background:linear-gradient(180deg,#E1FF26,#FFCF26);border:2px solid var(--yd);box-shadow:0 6px 0 var(--yd),0 14px 24px rgba(0,0,0,.22);cursor:pointer;white-space:nowrap;transition:transform .1s,box-shadow .1s}
+.pk-btn-yellow:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--yd),0 18px 28px rgba(0,0,0,.25)}
+.pk-btn-yellow:active{transform:translateY(4px);box-shadow:0 2px 0 var(--yd)}
+.pk-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.48);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.5);box-shadow:0 12px 20px rgba(9,17,13,.06)}
+.pk-header-inner{height:79px;display:flex;align-items:center;justify-content:space-between;max-width:var(--w);margin:0 auto;padding:0 20px}
+.pk-logo{display:flex;align-items:center;gap:7px;font-size:21px;font-weight:700;letter-spacing:-.5px;color:var(--dark)}
+.pk-logo img{height:30px;width:auto}
+.pk-nav{display:flex;align-items:center;gap:26px}
+.pk-nav a{font-size:16px;font-weight:700;color:var(--mid);transition:color .15s}
+.pk-nav a:hover{color:var(--dark)}
+.pk-burger{display:none;flex-direction:column;gap:6px;background:none;border:none;cursor:pointer;z-index:1001;padding:10px}
+.pk-burger span{display:block;width:28px;height:3px;background:var(--dark);transition:all .3s ease;border-radius:3px}
+.pk-mobile-menu{display:none;flex-direction:column;background:rgba(255,255,255,.98);backdrop-filter:blur(15px);position:absolute;top:100%;left:0;right:0;padding:20px;border-bottom:1px solid rgba(9,17,13,.1);box-shadow:0 20px 40px rgba(0,0,0,.1);opacity:0;transform:translateY(-10px);transition:all .3s ease;pointer-events:none;z-index:999}
+.pk-mobile-menu a{padding:16px 15px;font-size:18px;font-weight:700;color:var(--dark);text-align:center;border-bottom:1px solid rgba(0,0,0,.05);text-decoration:none}
+.pk-mobile-menu a.pk-btn-yellow{border-bottom:none;margin-top:15px;border:2px solid var(--yd);box-shadow:0 4px 0 var(--yd)}
+.pk-mobile-menu.open{display:flex;opacity:1;transform:translateY(0);pointer-events:auto}
+.pk-burger.open span:nth-child(1){transform:translateY(9px) rotate(45deg)}
+.pk-burger.open span:nth-child(2){opacity:0}
+.pk-burger.open span:nth-child(3){transform:translateY(-9px) rotate(-45deg)}
+/* Pages légales */
+.legal-hero{padding:72px 0 56px;text-align:center}
+.legal-hero h1{font-size:clamp(34px,5vw,68px);font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--dark);margin-bottom:14px}
+.legal-hero p{font-size:17px;color:var(--mid)}
+.legal-content{padding:0 0 100px}
+.legal-card{background:#fff;border-radius:24px;padding:48px;box-shadow:0 4px 30px rgba(9,17,13,.07);border:1px solid rgba(9,17,13,.06)}
+.legal-section{margin-bottom:44px;padding-bottom:44px;border-bottom:1px solid rgba(9,17,13,.07)}
+.legal-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.legal-section h2{font-size:20px;font-weight:800;letter-spacing:-.03em;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#E1FF26,#FFCF26);font-size:13px;font-weight:900;color:var(--dark);flex-shrink:0}
+.legal-section h3{font-size:16px;font-weight:700;color:var(--dark);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid rgba(9,17,13,.06)}
+.legal-section p{font-size:15px;color:var(--mid);line-height:1.7;margin-bottom:10px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{list-style:none;padding:0;margin:8px 0}
+.legal-section ul li{font-size:15px;color:var(--mid);line-height:1.7;padding:3px 0 3px 22px;position:relative}
+.legal-section ul li::before{content:'→';position:absolute;left:0;color:var(--yd);font-weight:700}
+.legal-section a{color:var(--bleu);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.legal-section strong{font-weight:700;color:var(--dark)}
+.legal-info-row{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.legal-info-row div{display:flex;gap:12px;font-size:15px;line-height:1.6}
+.legal-info-row div span:first-child{font-weight:700;color:var(--dark);min-width:200px;flex-shrink:0}
+.legal-info-row div span:last-child{color:var(--mid)}
+@media(max-width:991px){.pk-nav{display:none !important}.pk-burger{display:flex}}
+@media(max-width:767px){.legal-card{padding:28px 20px}.legal-info-row div{flex-direction:column;gap:2px}.legal-info-row div span:first-child{min-width:unset}}
+</style>
+</head>
+<body>
+
+<header class="pk-header">
+  <div class="pk-header-inner">
+    <a href="home.html" class="pk-logo"><img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a6cdd2943bfcb044c_logo_pikkopay_horizontal_black.svg" alt="PikkoPay"></a>
+    <nav class="pk-nav desktop-nav">
+      <a href="home.html">Accueil</a>
+      <a href="scan-go.html">Scan&amp;Go</a>
+      <a href="queue-busting.html">Queue Busting</a>
+      <a href="demo.html" class="pk-btn-yellow" style="font-size:15px;padding:14px 22px">Planifier une démo</a>
+    </nav>
+    <button class="pk-burger" onclick="toggleMenu()" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="pk-mobile-menu" id="mobileMenu">
+    <a href="home.html">Accueil</a>
+    <a href="scan-go.html">Scan&amp;Go</a>
+    <a href="queue-busting.html">Queue Busting</a>
+    <a href="demo.html" class="pk-btn-yellow">Planifier une démo</a>
+  </div>
+</header>
+
+<script>function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.querySelector('.pk-burger').classList.toggle('open')}</script>
+
+<!-- ===== HERO ===== -->
+<section class="legal-hero">
+  <div class="pk-w">
+    <p style="font-size:13px;font-weight:700;color:var(--mid);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">Informations légales</p>
+    <h1>Mentions légales</h1>
+    <p>Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique</p>
+  </div>
+</section>
+
+<!-- ===== CONTENU ===== -->
+<section class="legal-content">
+  <div class="pk-w">
+    <div class="legal-card">
+
+      <!-- Intro -->
+      <div class="legal-section">
+        <p>Conformément à la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, ainsi qu'au Règlement Général sur la Protection des Données (RGPD), nous vous informons que le présent site vous permet de découvrir les services de la société Pikkopay.</p>
+        <p>Le site est la propriété de la société désignée ci-après.</p>
+      </div>
+
+      <!-- 1. Éditeur -->
+      <div class="legal-section">
+        <h2><span class="num">1</span> Éditeur du site</h2>
+        <div class="legal-info-row">
+          <div><span>Dénomination sociale</span><span>PIKKOPAY</span></div>
+          <div><span>Forme juridique</span><span>SAS (Société par Actions Simplifiée)</span></div>
+          <div><span>Capital social</span><span>18 000 €</span></div>
+          <div><span>RCS</span><span>TROYES 917 619 595</span></div>
+          <div><span>N° TVA intracommunautaire</span><span>FR48894853142</span></div>
+          <div><span>Siège social</span><span>2 rue Gustave Eiffel, 10430 Rosières-près-Troyes</span></div>
+          <div><span>Téléphone</span><span>06 42 49 80 34</span></div>
+          <div><span>Email</span><span><a href="mailto:contact@pikkopay.fr">contact@pikkopay.fr</a></span></div>
+          <div><span>Directeur de publication</span><span>Vincent Terrasse</span></div>
+          <div><span>Délégué à la protection des données</span><span>Vincent Terrasse</span></div>
+        </div>
+      </div>
+
+      <!-- 2. Hébergeur du site -->
+      <div class="legal-section">
+        <h2><span class="num">2</span> Hébergeur du site</h2>
+        <p>Le site est hébergé par la société :</p>
+        <div class="legal-info-row">
+          <div><span>Société</span><span>GOOGLE</span></div>
+          <div><span>Adresse</span><span>1600 Amphitheatre Parkway, Mountain View, California</span></div>
+          <div><span>Téléphone</span><span>01 42 68 53 00</span></div>
+          <div><span>Email</span><span><a href="mailto:security@google.com">security@google.com</a></span></div>
+        </div>
+      </div>
+
+      <!-- 3. Hébergeur des données -->
+      <div class="legal-section">
+        <h2><span class="num">3</span> Hébergeur des données</h2>
+        <p>Les données sont hébergées par la société :</p>
+        <div class="legal-info-row">
+          <div><span>Société</span><span>OVHCloud</span></div>
+          <div><span>Adresse</span><span>2 rue Kellermann, 59100 Roubaix</span></div>
+          <div><span>Téléphone</span><span>09 72 10 10 07</span></div>
+          <div><span>Email</span><span><a href="mailto:commercial@gs.ovh.net">commercial@gs.ovh.net</a></span></div>
+        </div>
+        <p style="margin-top:14px">L'ensemble des données, notamment les données à caractère personnel, est hébergé sur le territoire de l'<strong>Union Européenne</strong>.</p>
+      </div>
+
+      <!-- 4. Photos -->
+      <div class="legal-section">
+        <h2><span class="num">4</span> Photos des produits</h2>
+        <p>Les photos présentées sur le site sont libres de droit.</p>
+      </div>
+
+      <!-- 5. Propriété intellectuelle -->
+      <div class="legal-section">
+        <h2><span class="num">5</span> Propriété intellectuelle</h2>
+        <p>Toutes les marques, photographies, textes, commentaires, illustrations, images animées ou non, séquences vidéo, sons, ainsi que toutes les applications informatiques qui pourraient être utilisées pour faire fonctionner le site et plus généralement tous les éléments reproduits ou utilisés sur le site sont protégés par les lois en vigueur au titre de la propriété intellectuelle.</p>
+        <p>Ils sont la propriété pleine et entière de la Société sauf mentions particulières. Toute reproduction, représentation, adaptation, traduction ou, de manière générale, toute utilisation du site et de son contenu, qu'elle soit totale ou partielle, sous quelque forme que ce soit, y compris les applications informatiques, est <strong>strictement interdite</strong> sans l'accord préalable et écrit de la Société.</p>
+      </div>
+
+      <!-- 6. Responsabilité -->
+      <div class="legal-section">
+        <h2><span class="num">6</span> Responsabilité</h2>
+        <p>La Société se réserve le droit de modifier à tout moment le contenu du site. Elle en gère les mises à jour. Cependant, elle ne garantit pas l'absence d'erreur ou d'inexactitude sur le site.</p>
+        <p>La Société décline toute responsabilité sur les dommages matériels qui pourraient être directement ou indirectement causés suite à l'accès au site.</p>
+      </div>
+
+      <!-- 7. Liens hypertextes -->
+      <div class="legal-section">
+        <h2><span class="num">7</span> Liens hypertextes</h2>
+        <p>Le site peut contenir des liens hypertexte donnant accès à d'autres sites web édités et gérés par des tiers et non par la Société. La Société ne pourra être tenue responsable directement ou indirectement dans le cas où lesdits sites tiers ne respecteraient pas les dispositions légales.</p>
+        <p>La création de liens hypertexte vers le site ne peut être faite <strong>qu'avec l'autorisation écrite et préalable</strong> de la Société.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer style="padding-top:28px;padding:28px 20px 0">
+  <div style="max-width:1380px;margin:0 auto;background:var(--bleu);border-radius:46px 46px 0 0;padding:58px 64px 42px;position:relative;overflow:hidden;box-shadow:0 -30px 100px rgba(9,17,13,.18)">
+    <div style="position:absolute;right:-200px;top:-232px;width:620px;height:620px;background:radial-gradient(circle,rgba(225,255,38,.28) 0%,rgba(255,207,38,.16) 50%,transparent 65%);pointer-events:none"></div>
+    <div style="display:grid;grid-template-columns:300px 300px 1fr;gap:0;margin-bottom:34px;min-height:235px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">L'encaissement 2.0</div>
+        <a href="scan-go.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Scan&amp;Go</a>
+        <a href="queue-busting.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Queue Busting</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:18px;font-weight:900;color:#fff;letter-spacing:-.03em">Contact</div>
+        <a href="demo.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none;padding-top:4px">Demander une démo</a>
+        <a href="mailto:contact@pikkopay.fr" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">contact@pikkopay.fr</a>
+        <a href="mentions-legales.html" style="font-size:16px;font-weight:700;color:#E1FF26;text-decoration:none">Mentions légales</a>
+        <a href="politique-confidentialite.html" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Politique de confidentialité</a>
+        <a href="#" onclick="pkRevokeCookieConsent();return false;" style="font-size:16px;font-weight:700;color:rgba(255,255,255,.76);text-decoration:none">Gérer mes cookies</a>
+      </div>
+      <div style="position:relative;background:rgba(255,255,255,.08);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.12);border-radius:34px;height:235px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12);display:flex;align-items:center;padding:0 36px">
+        <div style="display:flex;align-items:center;gap:27px">
+          <div style="width:111px;height:111px;border-radius:50%;border:5px solid #fff;overflow:hidden;flex-shrink:0;background:linear-gradient(170deg,#FFCF26,#E1FF26)">
+            <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998cad4a130f604d98b6_photo_alexandre.png" alt="Alexandre" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="font-size:38px;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">Contactez nous !</h3>
+            <a href="demo.html" style="display:inline-flex;align-items:center;gap:13px;padding:15px 21px;border-radius:14px;font-size:16px;font-weight:700;color:var(--dark);background:rgba(255,255,255,.92);backdrop-filter:blur(9px);border:1px solid rgba(255,255,255,.9);text-decoration:none;white-space:nowrap">Prendre RDV <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;flex-shrink:0"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,.14);margin-bottom:34px"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px;max-width:300px">
+        <img src="https://cdn.prod.website-files.com/69f86656616cc0aa1fb190e2/69f8998a9ddecf6ef5ac5d7a_logo_pikkopay_horizontal_white_yellow.svg" alt="PikkoPay" style="height:28px;width:auto;display:block"/>
+        <p style="font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.5">La nouvelle génération d'encaissement pour le retail alimentaire. Conçu, développé et opéré en France.</p>
+      </div>
+      <div style="font-size:16px;color:rgba(255,255,255,.78)">© 2026 Tous droits réservés.</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
